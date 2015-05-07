@@ -1,0 +1,745 @@
+body, table, td, tr
+{
+	background-color: #FFFFFF;
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+}
+
+h1 {  font-family: Arial; font-size: 14pt;}
+h2 {  font-family: Arial; font-size: 14pt; font-style:italic}
+h3 {  font-family: Arial; font-size: 12pt;}
+h4 {  font-family: Arial; font-size: 12pt; font-style:italic}
+h5 {  font-family: Arial; font-size: 10pt; font-weight:bold}
+h6 {  font-family: Arial; font-size: 10pt; font-style:italic}
+
+p { text-indent: 2.5em; text-align: justify}
+
+ol, ul { text-align: justify; margin-top: 5px}
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { border-width: 0px;}
+
+table.bracket, table.bracket tr, table.bracket tr td table, table.bracket tr td table tr, table.bracket tr td table tr td
+{
+	empty-cells: show;
+	border-spacing: 0px;
+	border-collapse: separate;
+	padding: 0px;
+	background-color: Transparent;
+	overflow: visible;
+}
+
+td.ac
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	background-image: url(ac_bg.jpg);
+	padding: 0px 0px 0px 20px;
+}
+td.ac table
+{
+	width: 150px;
+	height: 25px;
+}
+td.ac, td.ac table tr, td.ac table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.acXi { width: 18px; }
+td.acXs { width: 18px; }
+
+td.bg
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	padding: 0px 0px 0px 0px;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+}
+td.bg table
+{
+	width: 168px;
+	height: 23px;
+}
+td.bg, td.bg table tr, td.bg table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: left;
+	vertical-align: top;
+}
+td.bgXi { width: 18px; }
+td.bgXs { width: 18px; }
+
+td.bc
+{
+	width: 25px;
+	background-color: #FFFFFF;
+	background-image: url(bc_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.bc table
+{
+	width: 25px;
+	height: 25px;
+}
+td.bc, td.bc table tr, td.bc table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.bcXi { width: 0px; }
+td.bcXs { width: 0px; }
+
+td.bhl
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	background-image: url(bhl_bg.jpg);
+	padding: 0px 0px 0px 22px;
+}
+td.bhl table
+{
+	width: 148px;
+	height: 25px;
+}
+td.bhl, td.bhl table tr, td.bhl table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.bhlXi { width: 18px; }
+td.bhlXs { width: 18px; }
+
+td.blrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(blrr_bg.jpg);
+	padding: 0px 0px 0px 3px;
+}
+td.blrr table
+{
+	width: 157px;
+	height: 25px;
+}
+td.blrr, td.blrr table tr, td.blrr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.blrrXi { width: 18px; }
+td.blrrXs { width: 0px; }
+
+td.bnhl
+{
+	width: 25px;
+	background-color: #FFFFFF;
+	background-image: url(bnhl_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.bnhl table
+{
+	width: 25px;
+	height: 25px;
+}
+td.bnhl, td.bnhl table tr, td.bnhl table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.bnhlXi { width: 0px; }
+td.bnhlXs { width: 0px; }
+
+td.brrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(brrr_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.brrr table
+{
+	width: 160px;
+	height: 25px;
+}
+td.brrr, td.brrr table tr, td.brrr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.brrrXi { width: 0px; }
+td.brrrXs { width: 0px; }
+
+td.ch
+{
+	width: 25px;
+	background-color: #FFFFFF;
+	background-image: url(ch_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.ch table
+{
+	width: 25px;
+	height: 25px;
+}
+td.ch, td.ch table tr, td.ch table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.chXi { width: 0px; }
+td.chXs { width: 0px; }
+
+td.drr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(drr_bg.jpg);
+	padding: 0px 0px 0px 15px;
+}
+td.drr table
+{
+	width: 145px;
+	height: 25px;
+}
+td.drr, td.drr table tr, td.drr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.drrXi { width: 0px; }
+td.drrXs { width: 0px; }
+
+td.ec
+{
+	width: 170px;
+	background-color: #F0F0FF;
+	padding: 0px 0px 0px 0px;
+}
+td.ec table
+{
+	width: 170px;
+	height: 25px;
+}
+td.ec, td.ec table tr, td.ec table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.ecXi { width: 0px; }
+td.ecXs { width: 0px; }
+
+td.err
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(err_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.err table
+{
+	width: 160px;
+	height: 25px;
+}
+td.err, td.err table tr, td.err table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.errXi { width: 0px; }
+td.errXs { width: 0px; }
+
+td.ehrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	padding: 0px 0px 0px 0px;
+}
+td.ehrr table
+{
+	width: 160px;
+	height: 25px;
+}
+td.ehrr, td.ehrr table tr, td.ehrr table tr td
+{
+	font-family: Arial;
+	font-size: 8.25pt;
+	color: #000000;
+	text-align: left;
+	vertical-align: middle;
+}
+td.ehrrXi { width: 0px; }
+td.ehrrXs { width: 0px; }
+
+td.gd
+{
+	width: 170px;
+	background-color: #F0F0FF;
+	padding: 0px 0px 0px 0px;
+}
+td.gd table
+{
+	width: 170px;
+	height: 25px;
+}
+td.gd, td.gd table tr, td.gd table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.gdXi { width: 0px; }
+td.gdXs { width: 22px; }
+
+td.ghrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	padding: 0px 0px 0px 0px;
+}
+td.ghrr table
+{
+	width: 160px;
+	height: 25px;
+}
+td.ghrr, td.ghrr table tr, td.ghrr table tr td
+{
+	font-family: Arial;
+	font-size: 11.25pt;
+	font-weight: bold;
+	color: #000000;
+	text-align: left;
+	vertical-align: middle;
+}
+td.ghrrXi { width: 0px; }
+td.ghrrXs { width: 0px; }
+
+td.hc
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	background-image: url(hc_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.hc table
+{
+	width: 170px;
+	height: 25px;
+}
+td.hc, td.hc table tr, td.hc table tr td
+{
+	font-family: Arial;
+	font-size: 8.25pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.hcXi { width: 0px; }
+td.hcXs { width: 0px; }
+
+td.lrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(lrr_bg.jpg);
+	padding: 0px 0px 0px 3px;
+}
+td.lrr table
+{
+	width: 157px;
+	height: 25px;
+}
+td.lrr, td.lrr table tr, td.lrr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.lrrXi { width: 18px; }
+td.lrrXs { width: 0px; }
+
+td.lc
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	background-image: url(lc_bg.jpg);
+	padding: 0px 0px 0px 20px;
+}
+td.lc table
+{
+	width: 150px;
+	height: 25px;
+}
+td.lc, td.lc table tr, td.lc table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.lcXi { width: 18px; }
+td.lcXs { width: 18px; }
+
+td.mc
+{
+	width: 170px;
+	background-color: #F0F0FF;
+	padding: 0px 0px 0px 0px;
+}
+td.mc table
+{
+	width: 170px;
+	height: 25px;
+}
+td.mc, td.mc table tr, td.mc table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.mcXi { width: 0px; }
+td.mcXs { width: 0px; }
+
+td.ne
+{
+	width: 25px;
+	background-color: #FFFFFF;
+	padding: 0px 0px 0px 0px;
+}
+td.ne table
+{
+	width: 25px;
+	height: 25px;
+}
+td.ne, td.ne table tr, td.ne table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.neXi { width: 0px; }
+td.neXs { width: 0px; }
+
+td.trr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(trr_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.trr table
+{
+	width: 160px;
+	height: 25px;
+}
+td.trr, td.trr table tr, td.trr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.trrXi { width: 0px; }
+td.trrXs { width: 0px; }
+
+td.tc
+{
+	width: 25px;
+	background-color: #FFFFFF;
+	background-image: url(tc_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.tc table
+{
+	width: 25px;
+	height: 25px;
+}
+td.tc, td.tc table tr, td.tc table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.tcXi { width: 0px; }
+td.tcXs { width: 0px; }
+
+td.thrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(thrr_bg.jpg);
+	padding: 0px 0px 0px 3px;
+}
+td.thrr table
+{
+	width: 157px;
+	height: 25px;
+}
+td.thrr, td.thrr table tr, td.thrr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.thrrXi { width: 18px; }
+td.thrrXs { width: 0px; }
+
+td.thl
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	background-image: url(thl_bg.jpg);
+	padding: 0px 0px 0px 22px;
+}
+td.thl table
+{
+	width: 148px;
+	height: 25px;
+}
+td.thl, td.thl table tr, td.thl table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.thlXi { width: 18px; }
+td.thlXs { width: 18px; }
+
+td.tlrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(tlrr_bg.jpg);
+	padding: 0px 0px 0px 3px;
+}
+td.tlrr table
+{
+	width: 157px;
+	height: 25px;
+}
+td.tlrr, td.tlrr table tr, td.tlrr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.tlrrXi { width: 18px; }
+td.tlrrXs { width: 0px; }
+
+td.tnhl
+{
+	width: 25px;
+	background-color: #FFFFFF;
+	background-image: url(tnhl_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.tnhl table
+{
+	width: 25px;
+	height: 25px;
+}
+td.tnhl, td.tnhl table tr, td.tnhl table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.tnhlXi { width: 0px; }
+td.tnhlXs { width: 0px; }
+
+td.trrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(trrr_bg.jpg);
+	padding: 0px 0px 0px 3px;
+}
+td.trrr table
+{
+	width: 157px;
+	height: 25px;
+}
+td.trrr, td.trrr table tr, td.trrr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.trrrXi { width: 18px; }
+td.trrrXs { width: 0px; }
+
+td.ud
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	background-image: url(ud_bg.jpg);
+	padding: 0px 0px 0px 3px;
+}
+td.ud table
+{
+	width: 167px;
+	height: 25px;
+}
+td.ud, td.ud table tr, td.ud table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.udXi { width: 18px; }
+td.udXs { width: 18px; }
+
+td.urr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(urr_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.urr table
+{
+	width: 160px;
+	height: 25px;
+}
+td.urr, td.urr table tr, td.urr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.urrXi { width: 0px; }
+td.urrXs { width: 0px; }
+
+td.vl
+{
+	width: 25px;
+	background-color: #FFFFFF;
+	background-image: url(vl_bg.jpg);
+	padding: 0px 0px 0px 0px;
+}
+td.vl table
+{
+	width: 25px;
+	height: 25px;
+}
+td.vl, td.vl table tr, td.vl table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.vlXi { width: 0px; }
+td.vlXs { width: 0px; }
+
+td.vrr
+{
+	width: 160px;
+	background-color: #FFFFFF;
+	background-image: url(vrr_bg.jpg);
+	padding: 0px 0px 0px 15px;
+}
+td.vrr table
+{
+	width: 145px;
+	height: 25px;
+}
+td.vrr, td.vrr table tr, td.vrr table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.vrrXi { width: 0px; }
+td.vrrXs { width: 0px; }
+
+td.wc
+{
+	width: 170px;
+	background-color: #FFFFFF;
+	background-image: url(wc_bg.jpg);
+	padding: 0px 0px 0px 20px;
+}
+td.wc table
+{
+	width: 150px;
+	height: 25px;
+}
+td.wc, td.wc table tr, td.wc table tr td
+{
+	font-family: Arial;
+	font-size: 8pt;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+}
+td.wcXi { width: 18px; }
+td.wcXs { width: 18px; }
+

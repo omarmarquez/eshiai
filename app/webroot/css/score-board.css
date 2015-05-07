@@ -1,0 +1,126 @@
+  body {
+    background:#333;
+    text-align:center;
+    margin:0;
+    padding:0;
+    font-family:arial, helvetica, sans-serif;
+    font-size:12pt;
+  }
+  #container {
+    width:100%;
+    padding:10px;
+    background:#fff;
+    margin:30px auto 0 auto;
+    text-align:left;
+  }
+  
+  #footer {
+    margin:10px 0 0 0;
+    padding:10px 0 0 0;
+    text-align:right;
+    color:#777;
+    border-top:1px solid #ccc;
+  }
+    
+  
+  h1 {
+    font-size:21pt;
+    padding-bottom:10px;
+    margin:0 0 10px 0;
+    border-bottom:1px solid #ccc;
+  }
+  
+  h3 { font-size:12pt; }
+  
+  pre {
+    border:1px solid #ccc;
+    padding:10px;
+    background:#eee;
+  }
+  
+  a {
+    color:#d00;
+  }
+  
+  a:hover { color:#fff; background:#333; }
+
+.stopwatch {
+	padding:3px;
+	border:3px solid #444;
+	background:#000000;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	display:inline-block;
+}
+
+.stopwatch .display {
+	width:220px;
+	padding:10px;
+	margin-bottom:10px;
+	border:4px solid #444;
+	background: #000;
+	background-color:#76c800;
+	color:#0a2a0a;
+	font-size:40pt;
+	font-weight:bold;
+	text-align:center;
+	font-family:courier;
+	background:#fff;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+}
+
+.match .stopwatch .display {
+    width:680px;
+    font-size:110pt;
+}
+
+
+.board_row {
+	width:220px;
+	padding:20px;
+	margin-bottom:10px;
+	border:1px solid #444;
+	color:#FFF;
+	font-size:60pt;
+	font-weight:bold;
+	text-align:left;
+	font-family:verdana;
+	background:#000;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+}
+
+.board_row_white {
+    width:220px;
+    padding:20px;
+    margin-bottom:10px;
+    border:1px solid #444;
+    color:#444;
+    font-size:60pt;
+    font-weight:bold;
+    text-align:left;
+    font-family:verdana;
+    background:#FFFFFF;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+}
+.board_row_blue {
+    width:220px;
+    padding:20px;
+    margin-bottom:10px;
+    border:1px solid #444;
+    color:#444;
+    font-size:60pt;
+    font-weight:bold;
+    text-align:left;
+    font-family:verdana;
+    background:#0174DF ;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+}

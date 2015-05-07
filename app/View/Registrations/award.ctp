@@ -1,0 +1,1 @@
+<?php echo $this->Html->image('check_box_black.gif'); ?>

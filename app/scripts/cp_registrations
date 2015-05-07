@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+import os,sys
+
+srcEventId, tgtEventId = sys.argv[1], sys.argv[2]
+
+dblogin = database = 'judoshiai'
+dbhost = 'localhost'
+dbpass = 'tohkon'
+
+for r in os.popen( "echo 'SELECT * FROM registrations WHERE event_id=%s' | mysql -u %s -p%s -h%s %s" %( srcEventId, dblogin , dbpass, dbhost, database )):
+   print( r ) 

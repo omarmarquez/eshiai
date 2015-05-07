@@ -1,0 +1,502 @@
+/* Overwrites */
+
+body {
+	/*
+	background:#000000 url(../img/tatami.jpg) repeat center top;
+	*/
+	background:#FFFFFF;
+	color:#383838;
+	font-family:Verdana, Arial;
+	font-size:0.69em;
+	/*
+	line-height:16px;
+	*/
+}
+
+#container {
+	width: 90% ; /* 900px;*/
+	padding:10px 30px 0;
+	margin:0 auto;
+}
+
+#indicator{
+	break:both;
+	width: 130px;
+	height: 20px;
+}
+#busy-indicator { display:none; }
+
+#header h1 {
+	background:  url('../img/judo.gif') no-repeat left;
+	color: #fff;
+	padding: 0px 30px;
+}
+
+#header_search input {
+}
+
+form {
+	margin-right: 1px;
+	padding: 0;
+	width: 100%;
+}
+form div {
+	clear: none;
+}
+
+input[type=submit] {
+
+	width: 120px;
+	color:  #FFFFFF;
+	font-weight: bold;
+	background:#383838;
+}
+input[type=submit]:hover {
+
+	width: 120px;
+	color:  #FFFFFF;
+	font-weight: bold;
+	background:#999966;
+}
+
+table tr td {
+text-align:left;
+}
+/*  Additions from this point */
+
+.menu_item {
+	background: #f2f2f2;
+	border:1px solid #bbb;
+	border-top: 1px solid #fff;
+	border-left: 1px solid #fff;
+	text-align: center;
+ 	padding-right: 6px;
+	margin-right:	1px;
+	white-space: nowrap;
+	float:	left;	
+	padding-right: 6px;
+}
+.menu_item pool_lst{
+	width: 100%;
+}
+.menu_item a {
+	background:#f2f2f2;
+	display: block;
+	padding: 2px 4px;
+	padding-right: 6px;
+	text-decoration: none;
+}
+.menu_item a:hover {
+	background: #ccc;
+	color: #333;
+	padding-right: 6px;
+	text-decoration: none;
+}
+
+/* Pools */
+
+.float_left{
+	float: left;
+	width: 160px;
+	white-space:nowrap;
+}
+.float_right{
+	float:right;
+	white-space:nowrap;
+}
+
+.row_form div {
+	float:left ;
+}
+
+.mat{
+        color:      #000;
+        white-space:nowrap;
+        background: #ffffff; 
+        width:      480px;
+        height:     300px;
+        border:     #CCC 2px solid;
+        padding:    3px;
+        margin:     20px;
+        float:      left;
+        font-size  :80%;
+        overflow:   scroll;
+}
+
+.popup_win{
+		top:		15%;
+		height:		80%;
+		left:		15%;
+		font-weight: bold;
+		color:		#fff;
+		position: 	fixed;
+		z-index:	1011;
+		background:	#585858; 
+		border: 	#CCC 2px solid;
+		padding:	2px;
+		display:	none;
+	}
+
+.popup_cnt{
+		color:		#000;
+		white-space:nowrap;
+		background:	#ffffff; 
+		overflow:	scroll;		
+		width:		98%;
+		height:		98%;
+		border: 	#CCC 2px solid;
+		padding:	3px;
+}
+
+#popup_award{
+		top:		25%;
+		height:		auto;
+		left:		30%;
+		width:		600px;
+		font-weight: bold;
+		color:		#fff;
+		position: 	fixed;
+		z-index:	1011;
+		background:	#585858; 
+		border: 	#CCC 2px solid;
+		padding:	2px;
+		display:	none;
+	}
+#cmp_search{
+	float: 		right;
+	font-size:	70%;
+	margin-right:1px;
+}
+
+#cmp_search input{
+	position:	relative;
+	top:	0;
+	width:	auto;
+	background:  url('../img/search_glass.gif') no-repeat right;
+	padding-right: 20px;
+}
+
+/* Score Board */
+.score_name  {
+	font-size:	80%;
+	overflow:  hidden;
+}
+.reduce_10  {
+	font-size:	90%;
+}
+.reduce_20  {
+	font-size:	80%;
+}
+.reduce_30  {
+	font-size:	20%;
+}
+.scale_print_200  {
+	font-size:	200%;
+}
+#match_clock{
+	font-size:	200%;
+	float: left;
+	width: 80%;
+}
+#match_clock input{
+	font-size: 140%;
+}
+.match_ctl{
+	font-size	: 20%;
+	line-height	: 110%;
+	float		: right;
+}
+.match_hidden{
+	visibility: hidden;		
+	font-size: 1%;
+}
+
+#pin_clock{
+	float: left;
+	width: 75%;
+}
+
+
+#pin_score{
+	float:				right;
+	top:				0;
+	border: 			2px solid #EEE;
+	overflow:			hidden;
+	padding:			2px;
+}
+
+#mat_info{
+	padding: 2px;
+	overflow:hidden;
+	width: 100%;
+}
+
+
+
+table.scoreb{
+	border:0px;
+	clear: both;
+	color: #FFF;
+    font-weight: bold;
+ 	margin-bottom: 10px;
+	font-size:	620%;
+	white-space: nowrap;
+}
+
+
+table.scoreb input {
+
+	border:0;
+	background: transparent; 
+	border:0;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+	line-height:100%;
+	text-align: left;
+	font-weight:bold;
+	vertical-align: middle;
+}
+
+table.scoreb form{
+	width: 100%;
+	margin-right:	1px;
+}
+
+
+table tr.black_row td{
+	background: #000;
+}
+table tr.black_row input {
+
+	border:0;
+	color:	#2EFE2E;
+	background: transparent; 
+	border:0;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+	line-height:100%;
+	text-align: left;
+	font-weight:bold;
+	vertical-align: middle;
+}
+
+table tr.blue_row td{
+	background: #2E9AFE; 
+	font-size:	90%;
+}
+table tr.white_row td{
+	background: #FDF5E6; 
+	font-size:	90%;
+}
+
+
+table tr.red_row td{
+	background: #FBEFEF; 
+}
+
+
+
+/* other */
+.pagebreakhere {page-break-before: always}
+
+div.auto_complete    {
+     position         :absolute;
+     width            :250px;
+     background-color :white;
+     border           :1px solid #888;
+     margin           :0px;
+     padding          :0px;
+}
+
+
+
+/* d&d */
+
+.dragged{
+	   background-color: green;
+	   border: 2px solid #CCC;
+       font-weight: bold;	   	
+}
+
+.Draggable{
+	cursor: move;
+}
+
+.Droppable  {
+	background-color: #C66;
+	background:		 #C66;
+	height:	100%;
+}
+
+/* Matches */
+#deck_queue{
+	background-color: #99C68E;
+	font-family:	"Arial Narrow", Helvetica, sans-serif;
+	font-size:		500%;
+	font-weight: 	bold;
+	position:absolute;
+	top:	5px;
+	left:	5px;
+	right: 5px;
+	bottom:			5px;
+}
+.deck_queue_multi_0{
+	float:			left;
+	width:			100%;
+}
+.deck_queue_multi_1{
+	float:			left;
+	width:			100%;
+}
+.deck_queue_multi_2{
+	float:			left;
+	width:			50%;
+}
+.deck_queue_multi_3{
+	float:			left;
+	width:			33%;
+}
+.deck_queue_multi_4{
+	float:			left;
+	width:			50%;
+}
+.deck_queue_multi_5{
+	float:			left;
+	width:			33%;
+}
+.deck_queue_multi_6{
+	float:			left;
+	width:			33%;
+}
+.deck_queue_multi{
+	background-color: #99C68E;
+	font-family:	"Arial Narrow", Helvetica, sans-serif;
+	font-size:		500%;
+	font-weight: 	bold;
+}
+.deck_row{
+	position:		relative;
+	height:			20%;
+	
+	}
+
+
+.deck_blue {
+	white-space:nowrap;
+	height:			100%;
+	position:		absolute;
+	left:			50%;
+	right:			0;
+	overflow:		hidden;
+	border:			2px solid #CCC;
+	background: 	#2E9AFE;
+	color:			#FFF;
+	vertical-align: middle;
+	text-align: 	right;
+	z-index: 		100;
+	
+ }
+ 
+.deck_white{
+	white-space:nowrap;
+	height:			100%;
+	position:		absolute;
+	top:			0;
+	left:			0;
+	right:			50%;
+	overflow:		hidden;
+	border:			2px solid #CCC;
+	background: 	#FFF;
+	color:			#000;	
+	vertical-align: middle;
+	text-align: 	left;
+	z-index: 		100;
+	
+ }
+.deck_pool{
+	opacity:	0.6;
+	position:	relative;
+	left:		40%;
+	bottom:		5px;
+	width: 		20%;
+	z-index: 	200;
+	font-size:	50%;
+	color:		green;
+	text-align:	center;
+	
+}
+
+.deck_pool a{
+	background: #000;
+	color:		green;
+}
+
+.td_blue{
+	border:			2px solid #CCC;
+	background: 	#2E9AFE;
+	color:			#FFF;
+	vertical-align: middle;
+	text-align: 	left;
+	
+ }
+ 
+.td_white{
+	border:			2px solid #CCC;
+	background: 	#FFF;
+	color:			#000;	
+	vertical-align: middle;
+	text-align: 	right;
+	
+ }
+ 
+.warning{
+	background:		#F78181;
+	font-weight:	bold;
+	text-align:		center;
+}
+
+.pooling, .clubing{
+	float:			left;
+	margin-left:	2em;
+	margin-bottom: 	2em;
+	border:			2px solid #CCC;	
+}
+
+#sb_focus{
+	height:		0px;
+}
+
+input.pools_view  {
+	clear: both;
+	color: #000000;
+	background: #FFFFFF;
+	font-size: 100%;
+	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+	padding: 1px;
+	width: 50%;
+	height: 80%;	
+}
+
+fieldset {
+	border: 1px solid #ccc;
+	margin-top: 6px;
+	padding: 2px 2px;
+}
+fieldset legend {
+	background:#fff;
+	color: #e32;
+	font-size: 110%;
+	font-weight: bold;
+}
+
+div.index {
+	width: 90%;
+	float: left;
+    border-left:1px solid #666;
+    padding:10px 2%;
+}
+
+.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+    
