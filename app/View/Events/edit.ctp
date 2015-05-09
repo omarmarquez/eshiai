@@ -48,6 +48,7 @@
 		<li><?php echo $this->Html->link(__('List Events'), array('action' => 'index'));?></li>
         <li><?php echo $this->Html->link(__('Clone Registrations'), array('controller' => 'registrations', 'action' => 'event_dup'));?></li>
         <li><?php echo $this->Html->link(__('Import WP Registrations'), array('controller' => 'registrations', 'action' => 'import_wp_regs', $this->Form->value('Event.id') ));?></li>
+        <li><?php echo $this->Html->link(__('Import WP GForms Registrations'), array('controller' => 'registrations', 'action' => 'import_wp_regs_gf', $this->Form->value('Event.id') ));?></li>
         <li><?php echo $this->Html->link(__('Import WP Payments'), array('controller' => 'registrations', 'action' => 'import_wp_pmts', $this->Form->value('Event.id') ));?></li>
         <li><?php echo $this->Html->link(__('Import WP Clubs'), array('controller' => 'registrations', 'action' => 'import_wp_clubs', $this->Form->value('Event.id') ));?></li>
 	</ul>

@@ -1280,7 +1280,7 @@ function checkIn2( $event_id = null ){
 	} //import regs
 	
 	/*
- * Allows to import registrations from WP CSV Export
+ * Allows to import payments from WP CSV Export
  */	
 	public function import_wp_pmts($id = null) {
 
@@ -1400,5 +1400,177 @@ function checkIn2( $event_id = null ){
 		
 	} //fn
 	
-	
+/*
+ * Allows to import registrations from WP CSV Export Gravity Forms
+ */
+	public function import_wp_regs_gf($id = null) {
+
+
+		if ($this->request->is('post') || $this->request->is('put')) {
+
+			//debug( $this->request->data );
+			$ucid=0;
+			$uc = $this->Registration->Competitor->Club->find( 'first'
+								,array( 'conditions' =>  array( 'club_name' =>  "UNKNOWN"  )
+						));
+			if( $uc )
+				$ucid = $uc->id;
+
+    		$event_info = $this->Session->read('Event');
+			$row = 1;
+			$csvHead = null;
+			ini_set('auto_detect_line_endings',TRUE);
+			if (($handle = fopen(  $this->request->data["Registration"]["cfile"]["tmp_name"], "r")) !== FALSE) {
+
+    			while (($data = fgetcsv($handle, 4000)) !== FALSE) {
+    			   // debug($data);
+    				if( !$csvHead ){
+    					$csvHead = $data;
+    					continue;
+    				}
+					$num_comps = $data[0];
+					$row = array_combine( $csvHead, $data);
+
+    				//$partID= $data[0];
+					//$partID = md5(implode(",", $data));
+					$partID = crc32(implode(",", $data));
+    				if( $this->Registration->find( 'first', array( 'conditions' => array( 'participant_id' =>  $partID) ) ) ){
+
+    					continue;
+    				}
+
+    			for( $i = 1 ; $i <= $num_comps ; $i++ ){
+
+    				$dob = date( "Y-m-d", strtotime(  $row[ "$i Date of Birth"] )); // date( "Y-m-d", strtotime(  $data[ 20 ] ));
+    				$gender =  $row["$i Gender"]=='Male'?'M':'F'; // $data[ 21 ]=='Male'?'M':$data[ 21 ]=='M'?'M':'F';
+    				$lname = trim( str_replace( '\\','', $row["$i Competitor Name (Last)"])); // trim( str_replace( '\\','', $data[ 3 ])  );
+    				$fname = trim( str_replace( '\\','', $row["$i Competitor Name (First)"])); // trim( str_replace( '\\','', $data[ 4 ] ) );
+
+    				$csearch = array(
+						'LOWER(first_name)' => strtolower($fname)
+						,'LOWER(last_name)' => strtolower($lname)
+						,'comp_sex' => $gender
+						,'comp_dob' => $dob
+					);
+    				$cdata = array(
+						'first_name' => $fname
+						,'last_name' => $lname
+						,'comp_sex' => $gender
+						,'comp_dob' => $dob
+					);
+
+
+    				$this->Registration->Competitor->contain('Club');
+					$comp = $this->Registration->Competitor->find( 'first'
+						,array( 'conditions' =>  $csearch )
+					);
+
+					if( !$comp){
+
+						$cdata['club_id'] = $ucid;  // UNKNOWN
+						$club = $this->Registration->Competitor->Club->find( 'first'
+								,array( 'conditions' =>  array( 'LOWER(club_name) LIKE' => '%'.strtolower( trim(  $row["Dojo / Club"])) .'%')
+						));
+						if( $club )
+							$cdata['club_id'] = $club['Club']['id'];
+
+						$this->Registration->Competitor->create();
+						$this->Registration->Competitor->save( array( 'Competitor' => $cdata ), false);
+						$this->Registration->Competitor->contain('Club');
+						$comp = $this->Registration->Competitor->find( 'first'
+							,array( 'conditions' =>  $csearch )
+						);
+
+					}
+					// else{
+
+						debug( $comp );
+					//}
+					$kata_count = 0;
+					foreach( array(
+						"Please select Competitor $i's division:" => 'shiai',
+						"$i Please select the second division:" => 'shiai',
+						"$i Please select the third division:" => 'shiai',
+						"$i Kata Form" => 'kata',
+						"$i Second Kata Form" => 'kata',
+						"$i Third Kata Form" => 'kata'
+						) as $div => $r_type ){
+
+						if( ! $row[$div] ) continue
+						;
+						$dname = strtolower( explode(' ', $row[$div])[0] );
+						if($dname!='open'){
+							$dname .= 's';
+						}
+						$c_type = 'OTHER';
+						switch( $row["$i Judo Affiliation"] ){
+
+							case "USA Judo":
+								$c_type = "USA Judo";
+								break;
+
+							case "United States Judo Federation":
+								$c_type = "USJF";
+								break;
+						}
+
+						$k_p='';
+						if( $r_type =='kata') {
+							$kata_count++;
+							$k_p = $row[ "$i Tori Name"] .' & '. $row[ "$i Uke Name"];
+							if( $kata_count > 1 )
+								$k_p = $row[ "$i Tori Name $kata_count"] .' & '. $row[ "$i Uke Name $kata_count"];
+
+						}
+
+    					$reg_data=array(
+    					    'rtype'         => $r_type,
+    					    'division'      => $dname,
+    						'approved'		=>0,
+    						'event_id' 		=> $event_info['id'],
+    						'participant_id'=> $partID,
+    						'competitor_id' => $comp['Competitor']['id'],
+    						'club_name' 	=> $comp['Club']['club_name'],
+    						'club_abbr' 	=> $comp['Club']['club_abbr'],
+    						'comments'		=> 'ONLINE '
+    											. "\n Category: ". $row[$div]
+    											. "\n Sensei: ". $row["Sensei / Instructor"]
+    											. "\n Needs: ". $row["$i Please let us know what type of assistance or accommodation is requested, and/or provide the name of the person who will be assisting you."]
+    											. "\n "
+    											,
+    						'rank'			=> $row["$i Belt Color"],
+    						'payment'		=> $row["Payment Amount"],
+    						'paid'  		=> $row["Payment Status"],
+    					    'card_type'		=> $c_type,
+    						'card_number'	=> $row["$i Judo Card Number"],
+    						'kata_name'     => $r_type === 'kata'?explode(' - ',$row[$div])[0]:'',
+    						'kata_partner'  => $k_p
+
+    					);
+						//debug($reg_data); continue;
+						$this->Registration->create();
+    					if( !$this->Registration->save( array( 'Registration' => $reg_data ) )){
+							$this->Session->setFlash(__('A registration could not be saved. Please, try again.'));
+							debug( $comp );
+							debug( $reg_data );
+							return;
+						}
+						}
+
+	    			}
+    			}
+    			ini_set('auto_detect_line_endings',FALSE);
+    			fclose($handle);
+			}
+			$this->Session->setFlash(__('Import completed succesfully!.'));
+			$this->redirect(array('action' => 'index'));
+			//$this->redirect($this->referer());
+		} else {
+
+			$this->set( 'event_id', $id );
+
+		}
+
+	} //import regs
+
 }// class
