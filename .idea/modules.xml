@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/judoapp.iml" filepath="$PROJECT_DIR$/.idea/judoapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/eshiai.iml" filepath="$PROJECT_DIR$/.idea/eshiai.iml" />
     </modules>
   </component>
 </project>
+

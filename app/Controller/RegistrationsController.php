@@ -1405,6 +1405,7 @@ function checkIn2( $event_id = null ){
  */
 	public function import_wp_regs_gf($id = null) {
 
+        $import_errors=array();
 
 		if ($this->request->is('post') || $this->request->is('put')) {
 
@@ -1551,9 +1552,9 @@ function checkIn2( $event_id = null ){
 						$this->Registration->create();
     					if( !$this->Registration->save( array( 'Registration' => $reg_data ) )){
 							$this->Session->setFlash(__('A registration could not be saved. Please, try again.'));
-							debug( $comp );
-							debug( $reg_data );
-							return;
+                            array_push( $import_errors,
+                                array( 'competitor' => $comp, 'registration'=> $reg_data )
+                            );
 						}
 						}
 
@@ -1563,14 +1564,16 @@ function checkIn2( $event_id = null ){
     			fclose($handle);
 			}
 			$this->Session->setFlash(__('Import completed succesfully!.'));
-			$this->redirect(array('action' => 'index'));
-			//$this->redirect($this->referer());
+			//$this->redirect(array('action' => 'index'));
+			$this->redirect($this->referer());
 		} else {
 
 			$this->set( 'event_id', $id );
 
 		}
 
+        debug($import_errors);
+        $this->set( 'import_errors', $import_errors );
 	} //import regs
 
 }// class
