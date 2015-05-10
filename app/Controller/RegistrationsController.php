@@ -1433,8 +1433,8 @@ function checkIn2( $event_id = null ){
 					$row = array_combine( $csvHead, $data);
 
     				//$partID= $data[0];
-					//$partID = md5(implode(",", $data));
-					$partID = crc32(implode(",", $data));
+					$partID = md5(implode(",", $data));
+					//$partID = crc32(implode(",", $data));
     				if( $this->Registration->find( 'first', array( 'conditions' => array( 'participant_id' =>  $partID) ) ) ){
 
     					continue;
@@ -1483,10 +1483,12 @@ function checkIn2( $event_id = null ){
 						);
 
 					}
-					// else{
+                    /*
+					 else{
 
 						debug( $comp );
-					//}
+					}
+                    */
 					$kata_count = 0;
 					foreach( array(
 						"Please select Competitor $i's division:" => 'shiai',
@@ -1499,9 +1501,9 @@ function checkIn2( $event_id = null ){
 
 						if( ! $row[$div] ) continue
 						;
-						$dname = strtolower( explode(' ', $row[$div])[0] );
-						if($dname!='open'){
-							$dname .= 's';
+						$div_name = strtolower( explode(' ', $row[$div])[0] );
+						if($div_name!='open'){
+							$div_name .= 's';
 						}
 						$c_type = 'OTHER';
 						switch( $row["$i Judo Affiliation"] ){
@@ -1526,7 +1528,7 @@ function checkIn2( $event_id = null ){
 
     					$reg_data=array(
     					    'rtype'         => $r_type,
-    					    'division'      => $dname,
+    					    'division'      => $div_name,
     						'approved'		=>0,
     						'event_id' 		=> $event_info['id'],
     						'participant_id'=> $partID,

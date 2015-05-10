@@ -22,6 +22,7 @@ class UsersController extends AppController {
         if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid user'));
         }
+        $this->User->contain('Event');
         $this->set('user', $this->User->read(null, $id));
     }
 
@@ -53,6 +54,7 @@ class UsersController extends AppController {
             $this->request->data = $this->User->read(null, $id);
             unset($this->request->data['User']['password']);
         }
+        $this->render('add');
     }
 
     public function delete($id = null) {
