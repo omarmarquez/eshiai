@@ -36,6 +36,7 @@ class UsersController extends AppController {
                 $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
             }
         }
+        $this->set('events' , $this->User->Event->find('list', array('active' => 1)));
     }
 
     public function edit($id = null) {
@@ -52,7 +53,8 @@ class UsersController extends AppController {
             }
         } else {
             $this->request->data = $this->User->read(null, $id);
-            unset($this->request->data['User']['password']);
+            //unset($this->request->data['User']['password']);
+            $this->set('events' , $this->User->Event->find('list', array('active' => 1)));
         }
         $this->render('add');
     }
