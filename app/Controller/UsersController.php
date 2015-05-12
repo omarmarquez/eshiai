@@ -77,6 +77,9 @@ class UsersController extends AppController {
 
     public function login() {
     	if ($this->Auth->login()) {
+            if( $this->User->role == 'weights'){
+                $this->Session->write('Event', $this->User->Event );
+            }
         	$this->redirect($this->Auth->redirect());
    		 } else {
         	$this->Session->setFlash(__('Invalid username or password, try again'));
