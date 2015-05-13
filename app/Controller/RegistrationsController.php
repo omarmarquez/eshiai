@@ -36,8 +36,10 @@ class RegistrationsController extends AppController {
 
     public function isAuthorized($user){
 
-        if ( isset($user['role']) && $user['role'] === 'weights' && $this->action === 'weighIn' ) {
-            return true; //Admin can access every action
+        if ( isset($user['role']) && $user['role'] === 'weights' ){
+            if( $this->action === 'weighIn' || $this->action === 'autoCompetitor') {
+                return true; //Admin can access every action
+            }
         }
         return  parent::isAuthorized($user);
     }

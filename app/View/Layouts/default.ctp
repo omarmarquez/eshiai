@@ -59,6 +59,7 @@
             <?php else: ?>
             <div class="menu_item"><?php echo  $this->Html->link(__('Home', true), array('controller'=> 'events', 'action'=>'index'  ));?> </div>
              <div class="menu_item"><?php echo  $this->Html->link(__('Score Board', true), array('controller'=> 'mats', 'action'=>'board',  $event_id));?> </div>
+            <div class="menu_item"><?php echo  $this->Html->link(__('Weigh In', true), array('controller'=> 'registrations', 'action'=>'weighIn'));?>
             <?php endif; ?>
  		</div>
 		<div  id="indicator" >
