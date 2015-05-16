@@ -643,13 +643,17 @@ function checkIn2( $event_id = null ){
             $regs = $this->Registration->find('all', array(
 					'conditions' => array(
             			'Registration.event_id' => $event_id
+                        ,'Registration.rtype' => 'shiai'
             			,'Registration.competitor_id' => $this->request->data['Registration']['competitor_id']
             	)
             ));
             foreach( $regs as $r ):
 
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
-            	$this->Registration->save( $r );
+                $reg['Registration']['approved'] =  1 ;
+                $reg['Registration']['card_verified'] = 1 ;
+
+                $this->Registration->save( $r );
 
             endforeach;
         $this->Session->setFlash(__('Weight-In Completed for ', true) . $this->request->data['Registration']['name'] );
@@ -1150,7 +1154,12 @@ function checkIn2( $event_id = null ){
     				if( $partID == 'End of Record!' )
     					break;
     					
-    				if( $this->Registration->find( 'first', array( 'conditions' => array( 'participant_id' =>  $partID ) ) ) ){
+    				if( $this->Registration->find( 'first', array( 'conditions' =>
+                        array(
+                            'event_id' =>  $event_info['id'],
+                            'participant_id' =>  $partID,
+                        ) ) ) )
+                    {
     					
     					continue;
     				}
@@ -1445,7 +1454,12 @@ function checkIn2( $event_id = null ){
     				//$partID= $data[0];
 					$partID = md5(implode(",", $data));
 					//$partID = crc32(implode(",", $data));
-    				if( $this->Registration->find( 'first', array( 'conditions' => array( 'participant_id' =>  $partID) ) ) ){
+    				if( $this->Registration->find( 'first', array(
+                        'conditions' => array(
+                            'event_id' =>  $event_info['id'],
+                            'participant_id' =>  $partID
+                        )
+                    ) ) ) {
 
     					continue;
     				}
