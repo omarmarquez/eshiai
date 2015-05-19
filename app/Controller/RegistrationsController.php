@@ -650,8 +650,10 @@ function checkIn2( $event_id = null ){
             foreach( $regs as $r ):
 
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
-                $reg['Registration']['approved'] =  1 ;
-                $reg['Registration']['card_verified'] = 1 ;
+
+                $r['Registration']['approved'] =  1 ;
+                $r['Registration']['card_verified'] = 1 ;
+                $r['Registration']['auto_pool'] = 1 ;
 
                 $this->Registration->save( $r );
 
