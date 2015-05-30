@@ -37,7 +37,7 @@ class RegistrationsController extends AppController {
     public function isAuthorized($user){
 
         if ( isset($user['role']) && $user['role'] === 'weights' ){
-            if( $this->action === 'weighIn' || $this->action === 'autoCompetitor') {
+            if( in_array($this->action,  array( 'index', 'weighIn', 'autoCompetitor'))) {
                 return true; //Admin can access every action
             }
         }
@@ -651,7 +651,6 @@ function checkIn2( $event_id = null ){
 
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
 
-                $r['Registration']['approved'] =  1 ;
                 $r['Registration']['card_verified'] = 1 ;
                 $r['Registration']['auto_pool'] = 1 ;
 
@@ -1555,7 +1554,8 @@ function checkIn2( $event_id = null ){
     					$reg_data=array(
     					    'rtype'         => $r_type,
     					    'division'      => $div_name,
-    						'approved'		=>0,
+                            'approved'		=> 1,
+                            'auto_pool'		=> 0,
     						'event_id' 		=> $event_info['id'],
     						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],

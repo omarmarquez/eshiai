@@ -51,9 +51,10 @@ class AppController extends Controller {
         $user=$this->Auth->User();
         if( isset($user['role']) && $user['role']==='weights'){
             if( !$this->Session->check('Event') ){ $this->Session->write('Event', $user['Event']); }
-            if( $this->action != 'logout' && $this->action != 'weighIn' && $this->action != 'autoCompetitor') {
 
-                $this->redirect(array('controller'=>'registrations','action' => 'weighIn', $user['Event']['id'] ));
+            if( !in_array($this->action, array( 'index', 'logout', 'weighIn', 'autoCompetitor'))) {
+
+                $this->redirect(array('controller'=>'registrations','action' => 'index', $user['Event']['id'] ));
 
             }
         }
