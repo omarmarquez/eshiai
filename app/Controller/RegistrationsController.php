@@ -648,11 +648,10 @@ function checkIn2( $event_id = null ){
             	)
             ));
             foreach( $regs as $r ):
-
+				
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
-
-                $r['Registration']['card_verified'] = 1 ;
-                $r['Registration']['auto_pool'] = 1 ;
+                $r['Registration']['approved'] =  $this->request->data['Registration']['approved'] ;
+                $r['Registration']['card_verified'] = $this->request->data['Registration']['card_verified'] ;
 
                 $this->Registration->save( $r );
 
@@ -666,7 +665,7 @@ function checkIn2( $event_id = null ){
 
         $competitors = $this->Registration->query(
             "SELECT DISTINCT Competitor.id, Competitor.first_name, Competitor.last_name, Competitor.comp_city, Competitor.comp_state"
-            ." , Competitor.comp_sex, Competitor.comp_dob, Club.club_name"
+            ." , Competitor.comp_sex, Competitor.comp_dob, Club.club_name, Registration.card_type, Registration.card_number, Registration.card_verified, Registration.approved"
             . " FROM competitors Competitor"
              ." JOIN registrations Registration ON Registration.competitor_id = Competitor.id"
               ." JOIN clubs  Club ON Competitor.club_id = Club.id"
@@ -1552,10 +1551,10 @@ function checkIn2( $event_id = null ){
 						}
 
     					$reg_data=array(
-    					    'rtype'         => $r_type,
-    					    'division'      => $div_name,
-                            'approved'		=> 1,
-                            'auto_pool'		=> 0,
+ 						'rtype'         => $r_type,
+ 						'division'      => $div_name,
+    						'approved'		=> 0,
+ 						'auto_pool'		=> 0,
     						'event_id' 		=> $event_info['id'],
     						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],
@@ -1570,7 +1569,7 @@ function checkIn2( $event_id = null ){
     						'rank'			=> $row["$i Belt Color"],
     						'payment'		=> $row["Payment Amount"],
     						'paid'  		=> $row["Payment Status"],
-    					    'card_type'		=> $c_type,
+ 						'card_type'		=> $c_type,
     						'card_number'	=> $row["$i Judo Card Number"],
     						'kata_name'     => $r_type === 'kata'?explode(' - ',$row[$div])[0]:'',
     						'kata_partner'  => $k_p
