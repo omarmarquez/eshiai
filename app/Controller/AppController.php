@@ -48,6 +48,16 @@ class AppController extends Controller {
     public function beforeFilter() {
 
         parent::beforeFilter();
+        $user=$this->Auth->User();
+        if( isset($user['role']) && $user['role']==='weights'){
+            if( !$this->Session->check('Event') ){ $this->Session->write('Event', $user['Event']); }
+
+            if( !in_array($this->action, array( 'index', 'logout', 'weighIn', 'autoCompetitor'))) {
+
+                $this->redirect(array('controller'=>'registrations','action' => 'index', $user['Event']['id'] ));
+
+            }
+        }
 
         $this->Auth->allow('index', 'view','autoComplete2','board','open');
 

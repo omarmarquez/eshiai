@@ -6,6 +6,8 @@ App::uses('AppModel', 'Model');
  */
 class Event extends AppModel {
 
+    var $order = "event_date DESC";
+
    	var $validate = array(
 		'event_type' => array('notempty'),
 		'event_name' => array('notempty'),

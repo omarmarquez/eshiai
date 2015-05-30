@@ -1,4 +1,4 @@
 #!/bin/sh
-apache2ctl start
+apache2 -k  start
 tail -f /var/log/apache2/*
 

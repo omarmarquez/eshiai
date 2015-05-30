@@ -34,7 +34,17 @@ class RegistrationsController extends AppController {
 		}
     }
 
-/**
+    public function isAuthorized($user){
+
+        if ( isset($user['role']) && $user['role'] === 'weights' ){
+            if( in_array($this->action,  array( 'index', 'weighIn', 'autoCompetitor'))) {
+                return true; //Admin can access every action
+            }
+        }
+        return  parent::isAuthorized($user);
+    }
+
+    /**
  * index method
  *
  * @return void
@@ -633,13 +643,18 @@ function checkIn2( $event_id = null ){
             $regs = $this->Registration->find('all', array(
 					'conditions' => array(
             			'Registration.event_id' => $event_id
+                        ,'Registration.rtype' => 'shiai'
             			,'Registration.competitor_id' => $this->request->data['Registration']['competitor_id']
             	)
             ));
             foreach( $regs as $r ):
 
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
-            	$this->Registration->save( $r );
+
+                $r['Registration']['card_verified'] = 1 ;
+                $r['Registration']['auto_pool'] = 1 ;
+
+                $this->Registration->save( $r );
 
             endforeach;
         $this->Session->setFlash(__('Weight-In Completed for ', true) . $this->request->data['Registration']['name'] );
@@ -1140,7 +1155,12 @@ function checkIn2( $event_id = null ){
     				if( $partID == 'End of Record!' )
     					break;
     					
-    				if( $this->Registration->find( 'first', array( 'conditions' => array( 'participant_id' =>  $partID ) ) ) ){
+    				if( $this->Registration->find( 'first', array( 'conditions' =>
+                        array(
+                            'event_id' =>  $event_info['id'],
+                            'participant_id' =>  $partID,
+                        ) ) ) )
+                    {
     					
     					continue;
     				}
@@ -1405,6 +1425,7 @@ function checkIn2( $event_id = null ){
  */
 	public function import_wp_regs_gf($id = null) {
 
+        $import_errors=array();
 
 		if ($this->request->is('post') || $this->request->is('put')) {
 
@@ -1432,9 +1453,14 @@ function checkIn2( $event_id = null ){
 					$row = array_combine( $csvHead, $data);
 
     				//$partID= $data[0];
-					//$partID = md5(implode(",", $data));
-					$partID = crc32(implode(",", $data));
-    				if( $this->Registration->find( 'first', array( 'conditions' => array( 'participant_id' =>  $partID) ) ) ){
+					$partID = md5(implode(",", $data));
+					//$partID = crc32(implode(",", $data));
+    				if( $this->Registration->find( 'first', array(
+                        'conditions' => array(
+                            'event_id' =>  $event_info['id'],
+                            'participant_id' =>  $partID
+                        )
+                    ) ) ) {
 
     					continue;
     				}
@@ -1482,10 +1508,12 @@ function checkIn2( $event_id = null ){
 						);
 
 					}
-					// else{
+                    /*
+					 else{
 
 						debug( $comp );
-					//}
+					}
+                    */
 					$kata_count = 0;
 					foreach( array(
 						"Please select Competitor $i's division:" => 'shiai',
@@ -1498,9 +1526,9 @@ function checkIn2( $event_id = null ){
 
 						if( ! $row[$div] ) continue
 						;
-						$dname = strtolower( explode(' ', $row[$div])[0] );
-						if($dname!='open'){
-							$dname .= 's';
+						$div_name = strtolower( explode(' ', $row[$div])[0] );
+						if($div_name!='open'){
+							$div_name .= 's';
 						}
 						$c_type = 'OTHER';
 						switch( $row["$i Judo Affiliation"] ){
@@ -1525,8 +1553,9 @@ function checkIn2( $event_id = null ){
 
     					$reg_data=array(
     					    'rtype'         => $r_type,
-    					    'division'      => $dname,
-    						'approved'		=>0,
+    					    'division'      => $div_name,
+                            'approved'		=> 1,
+                            'auto_pool'		=> 0,
     						'event_id' 		=> $event_info['id'],
     						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],
@@ -1551,9 +1580,9 @@ function checkIn2( $event_id = null ){
 						$this->Registration->create();
     					if( !$this->Registration->save( array( 'Registration' => $reg_data ) )){
 							$this->Session->setFlash(__('A registration could not be saved. Please, try again.'));
-							debug( $comp );
-							debug( $reg_data );
-							return;
+                            array_push( $import_errors,
+                                array( 'competitor' => $comp, 'registration'=> $reg_data )
+                            );
 						}
 						}
 
@@ -1563,14 +1592,16 @@ function checkIn2( $event_id = null ){
     			fclose($handle);
 			}
 			$this->Session->setFlash(__('Import completed succesfully!.'));
-			$this->redirect(array('action' => 'index'));
-			//$this->redirect($this->referer());
+			//$this->redirect(array('action' => 'index'));
+			$this->redirect($this->referer());
 		} else {
 
 			$this->set( 'event_id', $id );
 
 		}
 
+        debug($import_errors);
+        $this->set( 'import_errors', $import_errors );
 	} //import regs
 
 }// class
