@@ -37,8 +37,6 @@
     <?php if( !empty($competitors)): ?>
 	
     <?php foreach( $competitors as $c ): ?>
-	
-	<?php echo $this->Form->create('Registration', array( 'action' => 'satelliteweighIn/' . $event_id ));?>
 
     <table>
 	<tr>
@@ -48,10 +46,12 @@
         <th>City</th>
         <th>State</th>
         <th>Club</th>
+        <!--
 	<th>Card Type</th>
 	<th>Card Number</th>
 	<th>Card Verified</th>
 	<th>Release Forms</th>
+	-->
         <th>Weight</th>
 	</tr>
 
@@ -65,10 +65,12 @@
         <td><?php echo $c['Competitor']['comp_city'];?></td>
         <td><?php echo $c['Competitor']['comp_state'];?></td>
         <td><?php echo $c['Club']['club_name'];?></td>
+		<!--
 		<td><?php echo $c['Registration']['card_type'];?></td>
 		<td><?php echo $c['Registration']['card_number'];?></td>
 		<td><?php echo $this->Form->checkbox( 'card_verified' , array( $c['Registration']['card_verified']==1?'checked':'none'));?></td>
 		<td><?php echo $this->Form->checkbox( 'approved' , array( $c['Registration']['approved']==1?'checked':'none'));?></td>
+		-->
 		<td><?php echo $this->Form->input( 'competitor_id', array( 'type' => 'hidden', 'value' => $c['Competitor']['id']));?>
             <?php echo $this->Form->input( 'name', array( 'type' => 'hidden', 'value' => $comp_name));?>
             <?php echo $this->Form->input( 'weight', array( 'style' => 'width:60px;', 'label'=> false, 'div'=>false));?>
@@ -77,19 +79,16 @@
                 'update'  => 'weightIn1'
                 ,'url'  => array( 'action' => 'weighIn/'. $event_id)
                 ,'div' => false
-				));?>
+				));
+			 echo $this->Form->end();
+				?>
 			</td>
     </tr>
-
-</table>
-<?php echo $this->Form->end(); ?>
 <?php endforeach ; ?>
-
+</table>
     <?php 
-        echo $this->Js->writeBuffer(); // Write cached scripts  
-    
+        echo $this->Js->writeBuffer(); // Write cached scripts
         endif;
-    
     ?>
 </div>
 </div>

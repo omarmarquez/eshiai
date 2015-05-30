@@ -650,8 +650,8 @@ function checkIn2( $event_id = null ){
             foreach( $regs as $r ):
 				
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
-                $r['Registration']['approved'] =  $this->request->data['Registration']['approved'] ;
-                $r['Registration']['card_verified'] = $this->request->data['Registration']['card_verified'] ;
+                //$r['Registration']['approved'] =  $this->request->data['Registration']['approved'] ;
+                //$r['Registration']['card_verified'] = $this->request->data['Registration']['card_verified'] ;
 
                 $this->Registration->save( $r );
 
@@ -1554,7 +1554,7 @@ function checkIn2( $event_id = null ){
  						'rtype'         => $r_type,
  						'division'      => $div_name,
     						'approved'		=> 0,
- 						'auto_pool'		=> 0,
+ 						    'auto_pool'		=> 0,
     						'event_id' 		=> $event_info['id'],
     						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],
