@@ -1432,8 +1432,8 @@ function checkIn2( $event_id = null ){
 					$row = array_combine( $csvHead, $data);
 
     				//$partID= $data[0];
-					//$partID = md5(implode(",", $data));
-					$partID = crc32(implode(",", $data));
+					$partID = md5(implode(",", $data));
+					//$partID = crc32(implode(",", $data));
     				if( $this->Registration->find( 'first', array( 'conditions' => array( 'participant_id' =>  $partID) ) ) ){
 
     					continue;
@@ -1482,10 +1482,11 @@ function checkIn2( $event_id = null ){
 						);
 
 					}
-					// else{
-
-						debug( $comp );
-					//}
+/*
+					else{
+						 debug( $comp );
+					}
+*/
 					$kata_count = 0;
 					foreach( array(
 						"Please select Competitor $i's division:" => 'shiai',
@@ -1563,8 +1564,8 @@ function checkIn2( $event_id = null ){
     			fclose($handle);
 			}
 			$this->Session->setFlash(__('Import completed succesfully!.'));
-			$this->redirect(array('action' => 'index'));
-			//$this->redirect($this->referer());
+			//$this->redirect(array('action' => 'index'));
+			$this->redirect($this->referer());
 		} else {
 
 			$this->set( 'event_id', $id );

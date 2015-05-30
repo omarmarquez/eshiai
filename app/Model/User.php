@@ -15,14 +15,35 @@ class User extends AppModel {
                 'message' => 'A password is required'
             )
         ),
+	'verify_password' => array(
+            'equaltofield' => array(
+                'rule' => array('equaltofield','password'),
+                'message' => 'Require the same value to password.',
+                //'allowEmpty' => false,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                // 'on' => 'create', // Limit validation to 'create' or 'update' operations
+            )
+        ),
         'role' => array(
             'valid' => array(
-                'rule' => array('inList', array('admin', 'author')),
+                'rule' => array('inList', array('admin', 'user', 'weights')),
                 'message' => 'Please enter a valid role',
                 'allowEmpty' => false
             )
         )
     );
+
+    public function equaltofield($check,$otherfield)
+    {
+        //get name of field
+        $fname = '';
+        foreach ($check as $key => $value){
+            $fname = $key;
+            break;
+        }
+        return $this->data[$this->name][$otherfield] === $this->data[$this->name][$fname];
+    }
 
 
    public function beforeSave( $options = Array()) {
@@ -31,4 +52,16 @@ class User extends AppModel {
     }
     return true;
 }
+
+	public $belongsTo = array(
+
+        'Event' => array(
+            'className' => 'Event',
+            'foreignKey' => 'event_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        )
+    );
+
 }
