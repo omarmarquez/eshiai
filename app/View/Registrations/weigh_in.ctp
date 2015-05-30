@@ -71,7 +71,9 @@
 		<td><?php echo $this->Form->checkbox( 'card_verified' , array( $c['Registration']['card_verified']==1?'checked':'none'));?></td>
 		<td><?php echo $this->Form->checkbox( 'approved' , array( $c['Registration']['approved']==1?'checked':'none'));?></td>
 		-->
-		<td><?php echo $this->Form->input( 'competitor_id', array( 'type' => 'hidden', 'value' => $c['Competitor']['id']));?>
+        <td>
+            <?php echo $this->Form->create('Registration', array( 'action' => 'weighIn/' . $event_id ));?>
+		<?php echo $this->Form->input( 'competitor_id', array( 'type' => 'hidden', 'value' => $c['Competitor']['id']));?>
             <?php echo $this->Form->input( 'name', array( 'type' => 'hidden', 'value' => $comp_name));?>
             <?php echo $this->Form->input( 'weight', array( 'style' => 'width:60px;', 'label'=> false, 'div'=>false));?>
 			<?php echo $this->Form->submit( 'Submit');
