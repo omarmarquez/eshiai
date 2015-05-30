@@ -75,9 +75,8 @@
 		</div>
 
 	<div id="footer">
-			&nbsp;<div class="menu_item"><?php echo  $this->Html->link(__('Clubs', true), array('controller'=> 'clubs', 'action'=>'index',  $event_id  ));?> </div>
-			&nbsp;<div class="menu_item"><?php echo  $this->Html->link(__('Competitors', true), array('controller'=> 'competitors', 'action'=>'index',  $event_id ));?> </div>
-			&nbsp;<div class="menu_item"><?php echo  $this->Html->link(__('Users', true), array('controller'=> 'users', 'action'=>'index',  $event_id ));?> </div>
+			<div class="menu_item"><?php echo  $this->Html->link(__('Clubs', true), array('controller'=> 'clubs', 'action'=>'index',  $event_id  ));?> </div>
+			<div class="menu_item"><?php echo  $this->Html->link(__('Competitors', true), array('controller'=> 'competitors', 'action'=>'index',  $event_id ));?> </div>
 
 	</div>
 	

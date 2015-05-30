@@ -2,8 +2,6 @@
 // app/Controller/UsersController.php
 class UsersController extends AppController {
 
-public $scaffold;
-
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow( 'logout');
@@ -24,9 +22,7 @@ public $scaffold;
         if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid user'));
         }
-	
-	$this->User->contain('Event');
-        $this->set('user', $this->User->read( null , $id));
+        $this->set('user', $this->User->read(null, $id));
     }
 
     public function add() {
@@ -55,10 +51,8 @@ public $scaffold;
             }
         } else {
             $this->request->data = $this->User->read(null, $id);
-            //unset($this->request->data['User']['password']);
-	$this->set('events' , $this->User->Event->find('list', array('active' => 1)));
+            unset($this->request->data['User']['password']);
         }
-	$this->render('add');
     }
 
     public function delete($id = null) {
