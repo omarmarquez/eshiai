@@ -49,8 +49,14 @@ class AppController extends Controller {
 
         parent::beforeFilter();
         $user=$this->Auth->User();
+
+        if( isset($user['role']) && $user['role'] != 'admin') {
+            if (!$this->Session->check('Event') || ( $this->Session->read('Event')['id'] !=  $user['Event']['id'] )) {
+                $this->Session->write('Event', $user['Event']);
+            }
+
+        }
         if( isset($user['role']) && $user['role']==='weights'){
-            if( !$this->Session->check('Event') ){ $this->Session->write('Event', $user['Event']); }
 
             if( !in_array($this->action, array( 'index', 'logout', 'weighIn', 'autoCompetitor'))) {
 
