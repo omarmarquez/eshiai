@@ -1558,16 +1558,16 @@ function checkIn2( $event_id = null ){
 							$up_s = 0;
 							$up_a = 0;
 							$shiai_count++;
-							if ( $shiai_count = 1)
+							if ( $shiai_count == 1)
 								$firstDiv = $div_name;
 							if ( $shiai_count > 1 && ( $div_name == $firstDiv || $div_name == $prevDiv )) {
 								$prefType = '';
 								switch ($shiai_count) {
 									case 2:
-										$prefType = $row["$i If the second division is the same as the first. what is your preference?"];
+										$prefType = $row["$i If the second division is the same as the first, what is your preference?"];
 										break;
 									case 3:
-										$prefType = $row["$i If the third division is the same as one of the others. what is your preference?"];
+										$prefType = $row["$i If the third division is the same as one of the others, what is your preference?"];
 										break;
 								}
 								switch ( $prefType ) {
