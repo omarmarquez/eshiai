@@ -84,6 +84,7 @@
 			<td><?php echo $reg['seed'];?></td>
 			<td>
 			<?php echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif'); ?>
+			<?php echo $html->image( $reg['card_verified']?'flag_green.gif':'flag_red.gif'); ?>
 			</td>
 		</tr>
 	<?php 

@@ -3,4 +3,5 @@
 /plugins
 /vendors
 .DS_Store
+/.idea
 tags

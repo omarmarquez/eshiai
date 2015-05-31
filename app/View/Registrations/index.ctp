@@ -21,6 +21,7 @@
 			<th><?php echo $this->Paginator->sort('division');?></th>
 			<th colspan=3><?php echo $this->Paginator->sort('extra');?></th>
 			<th><?php echo $this->Paginator->sort('approved');?></th>
+			<th><?php echo $this->Paginator->sort('card_verified');?></th>
 			<th><?php echo $this->Paginator->sort('pool');?></th>
 		</tr>
 	<?php
@@ -77,6 +78,9 @@
         </td>
         <td>
             <?php echo $html->image( $registration['Registration']['approved']?'flag_green.gif':'flag_red.gif'); ?>
+        </td>
+        <td>
+            <?php echo $html->image( $registration['Registration']['card_verified']?'flag_green.gif':'flag_red.gif'); ?>
         </td>
         <td>
             <?php echo $html->link($registration['Pool']['pool_name'], array('controller'=> 'pools', 'action'=>'view', $registration['Pool']['id'])); ?>

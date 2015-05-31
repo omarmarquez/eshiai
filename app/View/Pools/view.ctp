@@ -177,6 +177,7 @@
 			<?php } ?>
 			<td>
 			<?php echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif'); ?>
+			<?php echo $html->image( $reg['card_verified']?'flag_green.gif':'flag_red.gif'); ?>
 			</td>
 			<td class="actions">
 				<?php echo $html->link(__('View', true), array('controller'=> 'registrations', 'action'=>'view', $reg['id'])); ?>
