@@ -1514,6 +1514,8 @@ function checkIn2( $event_id = null ){
 					}
                     */
 					$kata_count = 0;
+					$shiai_count = 0;
+					$prevDiv = '';
 					foreach( array(
 						"Please select Competitor $i's division:" => 'shiai',
 						"$i Please select the second division:" => 'shiai',
@@ -1550,13 +1552,55 @@ function checkIn2( $event_id = null ){
 
 						}
 
+						//get 2nd division preference
+						if( $r_type =='shiai') {
+							$up_w = 0;
+							$up_s = 0;
+							$up_a = 0;
+							$shiai_count++;
+							if ( $shiai_count == 1)
+								$firstDiv = $div_name;
+							if ( $shiai_count > 1 && ( $div_name == $firstDiv || $div_name == $prevDiv )) {
+								$prefType = '';
+								switch ($shiai_count) {
+									case 2:
+										$prefType = $row["$i If the second division is the same as the first, what is your preference?"];
+										break;
+									case 3:
+										$prefType = $row["$i If the third division is the same as one of the others, what is your preference?"];
+										break;
+								}
+								switch ( $prefType ) {
+									case 'No preference':
+										$up_w = 1;
+										$up_s = 1;
+										$up_a = 1;
+										break;
+									case 'Up in weight':
+										$up_w = 1;
+										break;
+									case 'Up in age':
+										$up_a = 1;
+										break;
+									case 'Up in skill':
+										$up_s = 1;
+										break;
+								}
+							}
+							$prevDiv = $div_name;
+							
+						}
+						
     					$reg_data=array(
  						'rtype'         => $r_type,
  						'division'      => $div_name,
-    						'approved'		=> 0,
- 						    'auto_pool'		=> 0,
-    						'event_id' 		=> $event_info['id'],
-    						'participant_id'=> $partID,
+						'approved'		=> 0,
+						'upSkill'		=> $up_s == 1 ? 'Y' : 'N',
+						'upAge'			=> $up_a == 1 ? 'Y' : 'N',
+						'upWeight'		=> $up_w == 1 ? 'Y' : 'N',
+ 						'auto_pool'		=> $up_a == 1 || $up_w ==1 || $up_s == 1 ? 0 : 1,
+						'event_id' 		=> $event_info['id'],
+						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],
     						'club_name' 	=> $comp['Club']['club_name'],
     						'club_abbr' 	=> $comp['Club']['club_abbr'],
