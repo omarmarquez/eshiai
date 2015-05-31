@@ -175,10 +175,10 @@
 			<td><?php echo $reg['bracket_pos'];?></td>
 			<td width="3"><?php echo  $form->input(  $reg['id'] , array( 'value' => $reg['bracket_pos'], 'default' => $i ,'label' => false, 'div'=> false, 'size'=> 1, 'class' => 'pools_view') );?></td>
 			<?php } ?>
-			<td>
-			<?php echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif'); ?>
-			<?php echo $html->image( $reg['card_verified']?'flag_green.gif':'flag_red.gif'); ?>
-			</td>
+			<td> <?php 
+				echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif', ['alt' => 'Approved']); 
+				echo $html->image( $reg['card_verified']?'flag_green.gif':'flag_red.gif', ['alt' => 'Check-In']); 
+			?></td>
 			<td class="actions">
 				<?php echo $html->link(__('View', true), array('controller'=> 'registrations', 'action'=>'view', $reg['id'])); ?>
 				<?php echo $html->link(__('Edit', true), array('controller'=> 'registrations', 'action'=>'edit', $reg['id'])); ?>

@@ -87,10 +87,10 @@
 		<td><?php echo  $reg['rank']?></td>
 		<td><?php echo  $reg['upSkill']. $reg['upWeight'].$reg['upAge']?></td>
 		<td><?php echo  $reg['seed']?></td>
-		<td>
-			<?php if(!$reg['approved'] ) { echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif'); }?>
-			<?php if(!$reg['card_verified'] ) { echo $html->image( $reg['card_verified']?'flag_green.gif':'flag_red.gif'); }?>
-		</td>
+		<td><?php
+                     echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif', ['alt' => 'Approved']);
+                     echo $html->image( $reg['card_verified']?'flag_green.gif':'flag_red.gif', ['alt' => 'Check-In']);
+		?></td>
 		<td class="actions"><?php echo  $html->link('[+]', array('controller'=> 'competitors', 'action'=>'edit', $reg['Competitor']['id']) ) ?>
 		<?php if( $pool['Pool']['status'] == 0){ ?> <?php echo  $html->link('[e]', array('controller'=> 'registrations', 'action'=>'edit', $reg['id']) ) ?>
 		<?php echo  $this->Js->link('[r]', array('controller'=> 'pools', 'action'=>'rem_reg', $reg['id']) , array( 'update'=>'#pool_' . $reg['pool_id'],'confirm'=>'Remove?')) ?>
