@@ -41,12 +41,13 @@ foreach ($pools as $pool):
 	<?php } ?>
 	<div style='width:50%'>
 		<table>
-		 <tr><th colspan="3">&nbsp;</th><th>received</th></tr>
+		 <tr><th colspan="3">&nbsp;</th><th>ippons</th><th>received</th></tr>
 		<?php $j = 0; 	foreach ($pool['Registration'] as $reg): ?>
 		<tr>
 			<td> <?php echo $reg['bracket_pos'] ; ?></td>
 			<td> <?php echo $reg['Competitor']['last_name'] .", ". $reg['Competitor']['first_name']; ?></td>
 			<td> <?php echo $reg['Competitor']['Club']['club_name'] ; ?></td>
+			<td> <?php echo isset( $ippons[ $reg['id'] ] )? $ippons[ $reg['id'] ]:0; ?></td>
 			<td><div id='reg_<?php echo $reg['id'];?>'>
 				<?php if( ! $reg['awarded']):  
  		       	   echo $ajax->link( $html->image('check_box_empty.gif') ,
