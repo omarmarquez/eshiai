@@ -650,9 +650,6 @@ function checkIn2( $event_id = null ){
             foreach( $regs as $r ):
 				
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
-                //$r['Registration']['approved'] =  $this->request->data['Registration']['approved'] ;
-                //$r['Registration']['card_verified'] = $this->request->data['Registration']['card_verified'] ;
-
                 $this->Registration->save( $r );
 
             endforeach;
@@ -1235,7 +1232,9 @@ function checkIn2( $event_id = null ){
     				while( $regs_total > 0 ){   		
     					$j = $i +1;
     					$reg_data=array(
-    						'approved'		=>0,
+    						'approved'		=> 1,
+    						'aut_pool'		=> 0,
+    						'card_verified'		=> 0,
     						'event_id' 		=> $event_info['id'],
     						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],
@@ -1594,7 +1593,9 @@ function checkIn2( $event_id = null ){
     					$reg_data=array(
  						'rtype'         => $r_type,
  						'division'      => $div_name,
-						'approved'		=> 0,
+						'approved'		=> 1,
+						'auto_pool'		=> 0,
+						'card_verified'		=> 0,
 						'upSkill'		=> $up_s == 1 ? 'Y' : 'N',
 						'upAge'			=> $up_a == 1 ? 'Y' : 'N',
 						'upWeight'		=> $up_w == 1 ? 'Y' : 'N',

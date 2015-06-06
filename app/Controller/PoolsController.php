@@ -71,7 +71,7 @@ class PoolsController extends AppController {
                     ,'Mat'
                     ,'Registration' => array('Competitor')
               )
-        ));
+            ));
         //debug( $pools);
 
           endif;
@@ -869,6 +869,7 @@ function awards($id=null){
 		$ccond = array(  );
 		$rcond = array( 'Registration.bracket_pos <>' => 0 );
 		$pcond = array( 'Pool.status' => array(8,6) );
+        $icond = array( 'Player.win_lose' => 1, 'Player.by' => 'ippon' );
 
 		if( !empty($this->data)){ //filter
 			$id = $this->data['Event']['id'];
@@ -890,20 +891,30 @@ function awards($id=null){
 
 		$this->paginate = array( 'Pool' => array(
 			'limit'	=> 2000,
-			'contain' => array( 'PoolStatus', 'Registration' => array(
-					'conditions' => $rcond ,
-					'order'		=> 'Registration.bracket_pos',
-					'Competitor' => array (
-						'conditions' => $ccond ,
-						'Club')) ),
+			'contain' => array( 'PoolStatus',
+                                'Registration' => array(
+					                'conditions' => $rcond ,
+					                'order'		=> 'Registration.bracket_pos',
+            		                'Competitor' => array (
+						                    'conditions' => $ccond ,
+						                    'Club'
+                                    )
+                                )
+            ),
     		'order' => 'Pool.status DESC, Pool.max_age,Pool.max_weight,Pool.sex',
     		'conditions' => $pcond
 		));
 
-		$this->set('pools', $this->paginate('Pool'));
+        $this->set('pools', $this->paginate('Pool'));
 
-		$event = $this->Pool->Event->read(null,$id );
-		$this->set('event',$event );
+    $isql = "SELECT * FROM (SELECT registration_id AS reg_id, COUNT(match_id) AS ippons FROM matches_registrations mr JOIN matches m ON mr.match_id = m.id JOIN pools p ON m.pool_id = p.id WHERE p.event_id=$id AND win_lose=1 AND mr.by = 'ippon' GROUP BY registration_id) sq1";
+    $i_r = $this->Pool->query( $isql, false );
+    $ippons=array();
+    foreach( $i_r as $p ){
+
+        $ippons[$p['sq1']['reg_id'] ] = $p['sq1']['ippons'];
+    }
+    $this->set('ippons', $ippons);
 
 		$event = $this->Pool->Event->read(null,$id );
 		$this->set('event',$event );

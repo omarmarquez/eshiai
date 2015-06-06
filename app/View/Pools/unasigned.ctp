@@ -60,8 +60,10 @@
 		<td><?php echo  $reg['rank']?></td>
 		<td><?php echo  $reg['upSkill']. $reg['upWeight'].$reg['upAge']?></td>
 		<td><?php echo  $reg['seed']?></td>
-		<td><?php if(!$reg['approved'] ) { echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif'); }?>
-		</td>
+		<td><?php
+			echo $html->image( $reg['approved']?'flag_green.gif':'flag_red.gif', ['alt' => 'Approved']);
+                        echo $html->image( $reg['card_verified']?'flag_green.gif':'flag_red.gif', ['alt' => 'Check-In']);
+		?></td>
 		<td class="actions"><?php echo  $html->link('[+]', array('controller'=> 'competitors', 'action'=>'edit', $r['Competitor']['id']) ) ?>
 		<?php echo  $html->link('[e]', array('controller'=> 'registrations', 'action'=>'edit', $reg['id']) ) ?>	</td>
 	</tr>
