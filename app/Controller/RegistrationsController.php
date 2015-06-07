@@ -1581,7 +1581,7 @@ function checkIn2( $event_id = null ){
 									case 'Up in age':
 										$up_a = 1;
 										break;
-									case 'Up in skill':
+									case 'Up in rank':
 										$up_s = 1;
 										break;
 								}
