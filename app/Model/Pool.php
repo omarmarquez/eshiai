@@ -19,6 +19,12 @@ class Pool extends AppModel {
  */
 	public $displayField = 'pool_name';
 
+   	var $validate = array(
+		'min_weight' => array(
+			        'rule' => array('comparison', '>=', 1),
+        			'message' => 'Please set minimum to at least 1.'
+        		)
+	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
