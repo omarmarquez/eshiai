@@ -34,7 +34,7 @@
                 <td><?php echo $this->Form->input('card_number') ?></td>
             </tr>
             <tr>
-                <td><?php echo $this->Form->input('rtype',array('options'=>array('','shiai'=>'shiai','kata'=>'kata')));?></td>
+                <td><?php echo $this->Form->input('rtype',array('options'=>array('','shiai'=>'shiai','kata'=>'kata'),'default'=>'shiai'));?></td>
                 <td>
                 <div style='float:left;'>
                 <?php echo $this->Form->input('upSkill',array( 'options'=> array('N'=>'N','Y'=>'Y'), 'div' => false)) ?>

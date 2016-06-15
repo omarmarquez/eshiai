@@ -43,6 +43,10 @@
                                 );
                             ?>                       
                     </td>
+                    <td>
+                        <?php echo $html->link(__('Assign ALL Ready', true), array('action'=>'assignReady', $event_id), null, sprintf(__('Are you sure you want to assign to pools all the competitors that are ready?', true)));
+                        ?>
+                    </td>
                     <td> <a id='NewPoolLnk' href='#'>New Pool</a></td>
                                             
                     

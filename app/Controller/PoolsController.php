@@ -195,7 +195,6 @@ function setup( $id = null ) {
 
 	function unasigned( $id = null ){
 
-
 		$ccond = array( );
 		$rcond = array( );
 
@@ -234,7 +233,41 @@ function setup( $id = null ) {
 		$this->set(compact( 'pool', 'registrations') );
 
 
-} // fn
+	} // fn
+
+	function assignReady( $id = null ){
+
+		$ccond = array( );
+		$rcond = array( );
+
+		$rcond['Registration.event_id'] = $this->event['id'];
+		$rcond['Registration.pool_id'] = 0;
+
+		$this->Pool->Registration->contain( array(
+
+					'Competitor'=>array(
+						'conditions' => $ccond ,
+						//'order'  => 'Registration.weight',
+						)
+		));
+		foreach( $this->Pool->Registration->find( 'all',
+				array(
+					'conditions' => array(
+							'event_id'	=> $this->event['id'],
+							'auto_pool'	=> 1,
+							'pool_id'	=> 0,
+							'rtype'		=> 'shiai'
+					),
+					'order'	=> 'weight'
+				)
+		) as $reg)
+		{
+			$this->Pool->Registration->save( $reg, false );
+		}
+		$this->redirect( $this->referer());
+
+	} // fn
+
     function poolShow(  $id ) {
 
 	if( $id != 0){
@@ -869,6 +902,7 @@ function awards($id=null){
 		$ccond = array(  );
 		$rcond = array( 'Registration.bracket_pos <>' => 0 );
 		$pcond = array( 'Pool.status' => array(8,6) );
+		$icond = array( 'Player.win_lose' => 1, 'Player.by' => 'ippon' );
 
 		if( !empty($this->data)){ //filter
 			$id = $this->data['Event']['id'];
@@ -902,8 +936,6 @@ function awards($id=null){
 
 		$this->set('pools', $this->paginate('Pool'));
 
-		$event = $this->Pool->Event->read(null,$id );
-		$this->set('event',$event );
 
 		$event = $this->Pool->Event->read(null,$id );
 		$this->set('event',$event );
@@ -917,6 +949,14 @@ function awards($id=null){
 
 function awards_lst($id=null){
 	 $this->awards($id);
+	$isql = "SELECT * FROM (SELECT registration_id AS reg_id, COUNT(match_id) AS ippons FROM matches_registrations mr JOIN matches m ON mr.match_id = m.id JOIN pools p ON m.pool_id = p.id WHERE p.event_id=$id AND win_lose=1 AND mr.by = 'ippon' GROUP BY registration_id) sq1";		
+        $i_r = $this->Pool->query( $isql, false );
+	$ippons=array();
+	foreach( $i_r as $p ){
+
+		$ippons[$p['sq1']['reg_id'] ] = $p['sq1']['ippons'];
+	}
+        $this->set('ippons', $ippons);
 } //fn
 
 

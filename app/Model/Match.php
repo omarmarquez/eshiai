@@ -87,34 +87,16 @@ function award( $id , $pos , $score  ){
 	$this->contain( array( 'Player' => 'Registration' ));
 	$this->id =  $id  ;
 
-	if( $this->field('status') == 4  ) $redo = true;
+	if( $this->field('status') == 4  && $this->field('winner') != $pos ) 
+		$redo = true;
 
 //debug($redo); exit(0);
 	$pool_id = $this->field( 'pool_id')  ;
 	$this->Pool->id= $pool_id;
 	$pt = $this->Pool->field('type');
 
-
 	if( $redo == true  && $pt <> 'rr' ){
-
-		$mn = $this->field( 'match_num');
-		$mr = $this->field( 'round');
-		$dtcomp = $this->field( 'completed');
-
-		$sql = "SELECT mr.id, mr.match_id FROM matches_registrations mr " .
-						"JOIN matches m ON m.id = mr.match_id " .
-						"WHERE m.pool_id = $pool_id AND m.round > $mr AND mr.created > '$dtcomp'";
-			$res = $this->query( $sql );
-
-				foreach( $res as $r ){
-					$sql = "DELETE FROM matches_registrations WHERE id=" . $r['mr']['id'];
-					$this->query( $sql );
-					$sql = "UPDATE matches SET status=0, completed=NULL WHERE id=" . $r['mr']['match_id'];
-					$this->query( $sql );
-				}
-			//	debug($res);
-
-			//exit(0);
+		$this->invalidateMatch( $id, 0);
 	}
 
 	$this->set( array(
@@ -158,4 +140,33 @@ function award( $id , $pos , $score  ){
 	}
 
 } // function
+
+     function invalidateMatch( $id, $reg_id )
+	{
+	$this->id =  $id  ;
+	$pool_id = $this->field( 'pool_id');
+	$mn = $this->field( 'match_num');
+	$thisRound = $this->field( 'round') ;
+
+	$sql = "SELECT mr.match_id, mr.registration_id FROM matches_registrations mr " .
+			" JOIN matches m ON m.id = mr.match_id ".
+			" WHERE m.pool_id = $pool_id AND m.match_num > $mn " 
+			." AND mr.registration_id IN (SELECT registration_id from matches_registrations WHERE match_id=$id)"
+	;
+
+	$res = $this->query( $sql );
+	foreach( $res as $r ){
+		$this->invalidateMatch( $r['mr']['match_id'], $r['mr']['registration_id']);
+		}
+
+	$this->id =  $id  ;
+	$this->saveField('completed', null, false );  //ready
+	$this->saveField('status', 1, false );  //ready
+
+        if ($reg_id ) {
+		$sql = "DELETE FROM matches_registrations WHERE registration_id=$reg_id AND match_id=". $id;
+		$this->query( $sql );
+		$this->saveField('status', 0, false );  // not ready
+	}
+	} //function
 } //class
