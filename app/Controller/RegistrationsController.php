@@ -650,6 +650,9 @@ function checkIn2( $event_id = null ){
             foreach( $regs as $r ):
 				
             	$r['Registration']['weight'] = $this->request->data['Registration']['weight'];
+            	if($r['Registration']['upSkill'] == "N" && $r['Registration']['upAge'] == "N" && $r['Registration']['upWeight'] == "N"):
+            		$r['Registration']['auto_pool'] = 1 ;
+            	endif;
                 $this->Registration->save( $r );
 
             endforeach;
@@ -1581,7 +1584,7 @@ function checkIn2( $event_id = null ){
 									case 'Up in age':
 										$up_a = 1;
 										break;
-									case 'Up in skill':
+									case 'Up in rank':
 										$up_s = 1;
 										break;
 								}
@@ -1599,7 +1602,7 @@ function checkIn2( $event_id = null ){
 						'upSkill'		=> $up_s == 1 ? 'Y' : 'N',
 						'upAge'			=> $up_a == 1 ? 'Y' : 'N',
 						'upWeight'		=> $up_w == 1 ? 'Y' : 'N',
- 						'auto_pool'		=> $up_a == 1 || $up_w ==1 || $up_s == 1 ? 0 : 1,
+ 						#'auto_pool'		=> $up_a == 1 || $up_w ==1 || $up_s == 1 ? 0 : 1,
 						'event_id' 		=> $event_info['id'],
 						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],

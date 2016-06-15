@@ -1026,7 +1026,7 @@ function setPlaces( $id = null ){
  	   // App::import('Helper', 'Html');
 
  		//$fdf = new NtkFdf();
-		$this->Ntkfdf->init();
+		//$this->Ntkfdf->init();
 
  		//$html = new HtmlHelper();
  		$view = new View($this);
@@ -1034,12 +1034,13 @@ function setPlaces( $id = null ){
 		$this->Pool->contain('Registration');
  		$p = $this->Pool->read(null, $id);
 
- 		$this->Ntkfdf->set_value( "Event", $this->event['event_name']);
- 		$this->Ntkfdf->set_value( "Division", $p['Pool']['pool_name'] . " " . $p['Pool']['division']. " " . $p['Pool']['category']);
+ 		//$this->Ntkfdf->set_value( "Event", $this->event['event_name']);
+ 		//$this->Ntkfdf->set_value( "Division", $p['Pool']['pool_name'] . " " . $p['Pool']['division']. " " . $p['Pool']['category']);
 //Ilya
 	 	//$this->Ntkfdf->set_value( "Timestamp", date('m/d/y H:i:s'));
-
- 		$pt = $p['Pool']['type'];
+		$fields = array ('Event' => $this->event['event_name'], 'Division' => $p['Pool']['pool_name'] . " " . $p['Pool']['division']. " " . $p['Pool']['category']);
+ 		
+		$pt = $p['Pool']['type'];
  		$pstat = $p['Pool']['status'];
  		$ps = count( $p['Registration']);
 
@@ -1054,7 +1055,7 @@ function setPlaces( $id = null ){
 				. ".pdf";
  		//debug($pdfFile); exit(0);
  		//$fdf->ntk_fdf_set_file(  $pdfFile);
-		$this->Ntkfdf->set_file($pdfFile);
+		//$this->Ntkfdf->set_file($pdfFile);
 
  		$sql = "SELECT match_num, m.round, m.status, pos, c.id, c.first_name, c.last_name , u.club_abbr , r.win_lose, r.by, e.seed
  		FROM pools p
@@ -1082,10 +1083,12 @@ WHERE p.id =$id";
 				$val = $r['u']['club_abbr'] .": ";
 			}
 			$val .= $r['c']['first_name'] . " " . $r['c']['last_name'];
- 			$this->Ntkfdf->set_value( "$field", "$val");
+ 			//$this->Ntkfdf->set_value( "$field", "$val");
+			$fields[$field] = $val;
 			
 			if( $r['m']['round'] == 1 ){
- 				$this->Ntkfdf->set_value( "S_". $r['m']['match_num']."_". $r['r']['pos'], $r['e']['seed'] );
+ 				//$this->Ntkfdf->set_value( "S_". $r['m']['match_num']."_". $r['r']['pos'], $r['e']['seed'] );
+				$fields["S_". $r['m']['match_num']."_". $r['r']['pos']] = $r['e']['seed'];
 			}
  			//debug( "$field $val");
  			if( $pt = 'rr' ){
@@ -1096,7 +1099,8 @@ WHERE p.id =$id";
  			  	$wins[ $r['e']['seed'] ] ++ ;
  			  	$field =  $r['m']['match_num']   . "_wl_" . $r['r']['pos'];
  				$val =  $r['r']['by'];
- 				$this->Ntkfdf->set_value( "$field", "$val");
+ 				//$this->Ntkfdf->set_value( "$field", "$val");
+				$fields[$field] = $val;
  				$field =  $r['m']['match_num']   . "_scr_" . $r['r']['pos'];
  				$val2 = 1;
  				switch( $val ){
@@ -1108,7 +1112,8 @@ WHERE p.id =$id";
  							$val2= 5; break;
 
  				}
- 				$this->Ntkfdf->set_value( "$field", "$val2");
+ 				//$this->Ntkfdf->set_value( "$field", "$val2");
+				$fields[$field] = $val2;
  				$points[ $r['e']['seed'] ] += $val2;
 
  			 }elseif(  "". $r['r']['win_lose'] == "0"){
@@ -1122,9 +1127,12 @@ WHERE p.id =$id";
 			//	$this->Ntkfdf->set_value( "tot_win_$seed",  $r['match_wins'] );
 			//	$this->Ntkfdf->set_value( "tot_los_$seed",  $r['match_loses'] );
 			foreach( $wins as $s => $v ){
-			 	$this->Ntkfdf->set_value( "tot_win_$s",  $wins[$s]);
-				$this->Ntkfdf->set_value( "tot_los_$s",  $loses[$s]);
-				$this->Ntkfdf->set_value( "tot_pts_$s",  $points[$s]);
+			 	//$this->Ntkfdf->set_value( "tot_win_$s",  $wins[$s]);
+				$fields["tot_win_$s"] = $wins[$s];
+				//$this->Ntkfdf->set_value( "tot_los_$s",  $loses[$s]);
+				$fields["tot_los_$s"] = $loses[$s];
+				//$this->Ntkfdf->set_value( "tot_pts_$s",  $points[$s]);
+				$fields["tot_pts_$s"] = $points[$s];
 
 			}
 
@@ -1150,7 +1158,8 @@ WHERE p.id =$id";
 		foreach( $pos['Registration'] as $r){
 			$c = $r['Competitor'];
 			$i++;
-			$this->Ntkfdf->set_value( "winner_$i",  $c['first_name'] . " " . $c['last_name'] . " :" .  $c['Club']['club_name']);
+			//$this->Ntkfdf->set_value( "winner_$i",  $c['first_name'] . " " . $c['last_name'] . " :" .  $c['Club']['club_name']);
+			$fields["winner_$i"] = $c['first_name'] . " " . $c['last_name'] . " :" . $c['Club']['club_name'];
 
 
 			}
@@ -1158,7 +1167,7 @@ WHERE p.id =$id";
 		}
 
  		//$fdfStr=$fdf->ntk_get_fdf();
-		$fdfStr=$this->Ntkfdf->get_fdf();
+		//$fdfStr=$this->Ntkfdf->get_fdf();
 		//$this->layout = "fdf";
 		//$this->set( 'fdfStr' , $fdfStr );
 		
@@ -1167,12 +1176,19 @@ WHERE p.id =$id";
 		$pdfStr='';
 		
 
-			$fdf_fn = tempnam(".", "fdf");
-			$fp = fopen($fdf_fn, 'w');
+			//$fdf_fn = tempnam(".", "fdf");
+			$data_fn = tempnam(".", "dat");
 
-			if($fp) {
-			fwrite($fp, $fdfStr);
-			fclose($fp);
+			//$fp = fopen($fdf_fn, 'w');
+			$dat=serialize($fields);
+			$dp = fopen($data_fn, 'w');
+
+			if($dp) {
+			//fwrite($fp, $fdfStr);
+			fwrite($dp, $dat);
+
+			//fclose($fp);
+			fclose($dp);
 
 			// Send a force download header to the browser with a file MIME type
 			header("Content-Type: application/force-download");
@@ -1181,13 +1197,16 @@ WHERE p.id =$id";
 			// Actually make the PDF by running pdftk - make sure the path to pdftk is correct
 			// The PDF will be output directly to the browser - apart from the original PDF file, no actual PDF wil be saved on the server.
 			// $create = "/usr/local/bin/pdftk $pdfPath fill_form $fdf_fn output - flatten";
-			$create = "/usr/bin/pdftk $pdfPath fill_form $fdf_fn output - flatten";
+			//$create = "/usr/bin/pdftk $pdfPath fill_form $fdf_fn output - flatten";
+			$create = "perl " . WWW_ROOT . "/files/makepdf.pl " . $pdfPath . " " . $data_fn;
+			//debug($create);
 			error_log(  $create ) ;
 			passthru( $create );
 
 				
 			// delete temporary fdf file;
-			//unlink( $fdf_fn ); 
+			//unlink( $fdf_fn );
+			unlink($data_fn); 
 			}
 			exit(0);
 
