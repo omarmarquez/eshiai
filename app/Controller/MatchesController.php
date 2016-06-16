@@ -114,7 +114,7 @@ class MatchesController extends AppController {
 		foreach( $match['Player'] as $p )
 		{
 			$c = $p['Registration']['Competitor'];
-			$competitors[$p['pos']] = $c['Club']['club_abbr'].':'.$c['first_name']. "&nbsp;".$c['last_name'];
+			$competitors[$p['pos']] = $c['first_name']. " ".$c['last_name']." (".$c['Club']['club_abbr'].")";
 		}
 		$mat_id = $this->$match['Match']['mat_id'];
 

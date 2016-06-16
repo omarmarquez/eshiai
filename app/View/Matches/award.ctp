@@ -28,8 +28,11 @@
                 </td>
                 </tr>
                 <tr>
-                   <td class="td_white"><?php echo $form->submit(__($competitors[1].' Wins', true), array( 'onclick' =>'this.form["data[Match][winner]"].value=1;', 'div'=>false));   ?></td>
-                   <td class="td_blue"><?php echo $form->submit(__($competitors[2].' Wins', true), array( 'onclick' =>'this.form["data[Match][winner]"].value=2;', 'div'=>false)); ?></td>
+                    <td colspan="2"><h3>Select Winner:</h3></td>
+                </tr>
+                <tr>
+                   <td class="td_white"><?php echo $form->submit(__($competitors[1], true), array( 'onclick' =>'this.form["data[Match][winner]"].value=1;', 'div'=>false, 'style'=>'width:300px'));   ?></td>
+                   <td class="td_blue"><?php echo $form->submit(__($competitors[2], true), array( 'onclick' =>'this.form["data[Match][winner]"].value=2;', 'div'=>false, 'style'=>'width:300px')); ?></td>
   
                 </tr>
             </table>
