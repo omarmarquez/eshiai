@@ -141,7 +141,7 @@ function award( $id , $pos , $score  ){
 
 } // function
 
-     function invalidateMatch( $id, $reg_id )
+    function invalidateMatch( $id, $reg_id )
 	{
 	$this->id =  $id  ;
 	$pool_id = $this->field( 'pool_id');
