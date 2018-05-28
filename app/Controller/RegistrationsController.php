@@ -1087,7 +1087,7 @@ function checkIn2( $event_id = null ){
 				$r['Registration']['match_wins'] = 0;
 				$r['Registration']['match_loses'] = 0;
 							if(!$r['Registration']['card_type'] ){
-					$r['Registration']['card_type']='UNKNOWN';
+					$r['Registration']['card_type']='OTHER';
 				}
 				if(!$r['Registration']['rtype'] ){
 					$r['Registration']['rtype']='shiai';

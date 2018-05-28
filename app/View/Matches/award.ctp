@@ -16,7 +16,8 @@
                     <fieldset>
                         <legend>Score</legend>
                 <?php 
-                $options = array( 'Ippon'=>'ippon', 'Wazaari'=>'wazaari', 'Yuko'=>'yuko', 'Hantei'=>'hantei', 'Fusen-gachi(no show)'=>'fusen-gachi','Hansoku-make (disqualification)'=>'hansoku-make');
+		$val_script = 'if(this.form["data[Match][score]"].value == "") { alert("Error: Please select a score!"); return false; }; ';
+                $options = array( 'Ippon'=>'ippon', 'Wazaari'=>'wazaari', 'Shido'=>'yuko', 'Fusen-gachi(no show)'=>'fusen-gachi','Hansoku-make (disqualification)'=>'hansoku-make');
                 foreach ($options as $label => $score):
                 ?>
                 <div class="float_left">
@@ -31,8 +32,8 @@
                     <td colspan="2"><h3>Select Winner:</h3></td>
                 </tr>
                 <tr>
-                   <td class="td_white"><?php echo $form->submit(__($competitors[1], true), array( 'onclick' =>'this.form["data[Match][winner]"].value=1;', 'div'=>false, 'style'=>'width:300px'));   ?></td>
-                   <td class="td_blue"><?php echo $form->submit(__($competitors[2], true), array( 'onclick' =>'this.form["data[Match][winner]"].value=2;', 'div'=>false, 'style'=>'width:300px')); ?></td>
+                   <td class="td_white"><?php echo $form->submit("White", array( 'onclick' =>$val_script . 'this.form["data[Match][winner]"].value=1;', 'div'=>false, 'style'=>'width:300px'));   ?></td>
+                   <td class="td_blue"><?php echo $form->submit("Blue", array( 'onclick' =>$val_script . 'this.form["data[Match][winner]"].value=2;', 'div'=>false, 'style'=>'width:300px')); ?></td>
   
                 </tr>
             </table>

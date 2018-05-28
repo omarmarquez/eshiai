@@ -66,14 +66,12 @@
             </td>
             <td>I</td>
             <td>W</td>
-            <td>Y</td>
             <td>S</td>
         </tr>
 	    <tr class="board_row_white" style="text-align:center;">
 	        <td colspan=2 style="text-align:left;"><span class="white_name1"><?php echo $clubb ?></span></td>
             <td rowspan=2><span class="white_i">0</span></td>
             <td rowspan=2><span class="white_w">0</span></td>
-            <td rowspan=2><span class="white_y">0</span></td>
             <td rowspan=2><span class="white_s">0</span></td>
  	    </tr>
         <tr class="board_row_white" style="text-align:center;" >
@@ -83,7 +81,6 @@
 	        <td colspan=2 style="text-align:left;"><span class="blue_name1"><?php echo $clubw ?></span></td>
             <td rowspan=2><span class="blue_i">0</span></td>
             <td rowspan=2><span class="blue_w">0</span></td>
-            <td rowspan=2><span class="blue_y">0</span></td>
             <td rowspan=2><span class="blue_s">0</span></td>
  	    </tr>
        <tr class="board_row_blue" style="text-align:center;">
@@ -109,7 +106,14 @@
 		    var mainTimer = new Timer();
 		    var pinTimer = new Timer();
 		     
-		    $('#award_dialog').dialog({autoOpen: false});
+		    $('#award_dialog').dialog({
+			autoOpen: false, 
+			resizable: false,
+      			height: "auto",
+      			width: 620,
+      			modal: true
+			});
+
 			$('#clock1').stopwatch('init', 'main', -1, mainTimer );
 			$('#clock2').stopwatch('init', 'pin', 1, pinTimer );
 			$('#scoreboard').scoreboard( mainTimer, pinTimer, '<?php echo addslashes( $pool_name) ?>','<?php addslashes(  $cwname) ?>', '<?php addslashes( $cbname) ?>', '<?php echo $aurl ?>' );

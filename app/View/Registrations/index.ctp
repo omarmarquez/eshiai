@@ -16,6 +16,7 @@
 			<th><?php echo $this->Paginator->sort('rtype');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th><?php echo $this->Paginator->sort('weight');?></th>
+ 			<th><?php echo $this->Paginator->sort('weight_in_remote','RW');?></th>
 			<th><?php echo $this->Paginator->sort('age');?></th>
 			<th><?php echo $this->Paginator->sort('rank');?></th>
 			<th><?php echo $this->Paginator->sort('division');?></th>
@@ -57,6 +58,9 @@
         </td>
                 <td>
             <?php echo $registration['Registration']['weight']; ?>
+        </td>
+        <td>
+	 <?php echo $html->image( $registration['Registration']['weight_in_remote']?'flag_yellow.gif':'flag_green.gif'); ?>
         </td>
         <td>
             <?php echo $registration['Registration']['age']; ?>

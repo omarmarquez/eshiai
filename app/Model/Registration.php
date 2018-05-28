@@ -174,7 +174,8 @@ function beforeSave( $options = array() ) {
 	$cat = "";
 	$res = $this->query( "SELECT category FROM rank_category " .
 			" WHERE rank='" . $this->data['Registration']['rank'] ."' " .
-					" AND division='" . $this->data['Registration']['division'] ."'"
+					" AND division='" . $this->data['Registration']['division'] ."'" .
+					" AND " .  $this->data['Registration']['age'] . " BETWEEN age_start AND age_end" 
 	);
 	 // debug($this->data['Registration'] ); debug($res); exit(0);
 

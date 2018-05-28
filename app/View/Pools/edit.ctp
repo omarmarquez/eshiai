@@ -28,6 +28,10 @@
 		<td><?php echo  $form->input('division',array('options'=>array('juniors'=>'juniors','seniors'=>'seniors','masters'=>'masters','open'=>'open'))) ?></td>
 		<td><?php echo  $form->input('category',array('options'=>array(''=>'', 'advanced'=>'advanced','novice'=>'novice'))) ?></td>
 	</tr>
+    <tr>
+		<td><?php echo  $form->input('shime',array('options'=>array(1=>'YES', 0=>'NO'),'default'=>1)) ?></td>
+		<td><?php echo  $form->input('kansetsu',array('options'=>array(1=>'YES', 0=>'NO' ),'default'=>1)) ?></td>
+	</tr>
 	<tr>
 		<td><?php echo $form->input('sex',array('options'=>array('M'=>'M','F'=>'F', 'A'=>'All'))) ?></td>
         <td><?php echo $form->input('type', array('options'=>
