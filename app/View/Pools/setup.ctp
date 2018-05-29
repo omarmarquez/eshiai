@@ -43,6 +43,10 @@
                                 );
                             ?>                       
                     </td>
+                    <td>
+                        <?php echo $html->link(__('Assign ALL Ready', true), array('action'=>'assignReady', $event_id), null, sprintf(__('Are you sure you want to assign to pools all the competitors that are ready?', true)));
+                        ?>
+                    </td>
                     <td> <a id='NewPoolLnk' href='#'>New Pool</a></td>
                                             
                     
@@ -75,6 +79,8 @@
         <?php echo  $form->input('Pool.max_age' , array( 'default' => $fmaxa)) ?>
         <?php echo  $form->input('Pool.min_weight' , array( 'default' => $fminw)) ?>
         <?php echo  $form->input('Pool.max_weight' , array( 'default' => $fmaxw)) ?>
+        <?php echo  $form->input('shime',array('options'=>array(1=>'YES', 0=>'NO'),'default'=>1)) ?>
+        <?php echo  $form->input('kansetsu',array('options'=>array(1=>'YES', 0=>'NO' ),'default'=>1)) ?>
         <?php echo  $form->submit('Apply', array( 'div' => false ) ) ?>
         <?php echo  $form->end() ?>
         </fieldset>

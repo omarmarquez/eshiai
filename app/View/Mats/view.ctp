@@ -4,6 +4,7 @@
     $form=$this->Form;
     $ajax=$this->Js;
     $mid =$mat['Mat']['id'];
+    echo $this->Html->script('jquery-ui.min');
  ?>
 
 <h2>Deck for <?php echo 'Mat &nbsp;' . $mat['Mat']['name'] . ' ::' .$mat['Mat']['location'] ?>
@@ -42,7 +43,7 @@
 </td>
 <td>
 <div id="run_queue" class="match_queue" align="right">
-<?php include('run_queue.ctp'); ?>
+<?php include('sort_queue.ctp'); ?>
 </div>
 </td>
 </tr></table>

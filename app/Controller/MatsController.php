@@ -70,6 +70,7 @@ class MatsController extends AppController {
 					))
 			,'Pool'
 		));
+		$this->set('re_url', Router::url(array('action' => 'reorder_deck', $id)));
 		$this->set('mat', $this->Mat->read(null, $id));
 
 	}
@@ -233,6 +234,27 @@ class MatsController extends AppController {
 		$this->set('mat', $this->Mat->read(null, $id));
 		$this->render( $view );
 	} //fn
+
+	function reorder_deck($id = null)
+    {
+		$this->layout = "ajax";
+		$this->Mat->contain('Deck');
+		$mat = $this->Mat->read(null, $id);
+			
+		$mydata = $this->request->data['neworder'];
+		$ta = array();
+		$pos = 0;
+		foreach( $mydata as $m){
+			$ta[$m] = $pos++;
+		} 
+		$mydata = $ta;
+		foreach($mat['Deck'] as $m){
+			$this->Mat->Match->id = $m['id'];
+			$this->Mat->Match->savefield('qorder', $mydata[$m['id']], false);
+		}
+   	    $this->set( compact('mat','mydata'));
+
+	}// fn
 
 
 	function put_at_top( $id = null, $match_id = null , $first = true){

@@ -1,7 +1,5 @@
 <?php
-    echo $this->Html->script( array('jquery.ui.core', 'jquery.ui.widget', 'jquery.ui.position' ),false );
-    echo $this->Html->script( array('jquery.ui.tabs','jquery.ui.accordion','jquery.ui.autocomplete' ),false );
-    echo $this->Html->script( array('jquery.ui.mouse','jquery.ui.draggable','jquery.ui.droppable','jquery.ui.resizable' ,'jquery.ui.dialog'),false );
+    echo $this->Html->script('jquery-ui.min');  
     $html=$this->Html;
     $form=$this->Form;
     $ajax=$this->Js;

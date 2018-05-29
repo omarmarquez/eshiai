@@ -1,5 +1,3 @@
-<?php //include "award_match.ctp"; ?>
-
 	<table  cellpadding = "0" cellspacing = "0" align="right">
 	 <tr>
 		<th colspan="1"><?php echo __('Pool'); ?></th>

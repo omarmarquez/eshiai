@@ -41,7 +41,7 @@ foreach ($pools as $pool):
 	<?php } ?>
 	<div style='width:50%'>
 		<table>
-		 <tr><th colspan="3">&nbsp;</th><th>ippons</th><th>received</th></tr>
+		 <tr><th colspan="3">&nbsp;</th><th>Ippons</th><th>received</th></tr>
 		<?php $j = 0; 	foreach ($pool['Registration'] as $reg): ?>
 		<tr>
 			<td> <?php echo $reg['bracket_pos'] ; ?></td>

@@ -106,13 +106,19 @@ class MatchesController extends AppController {
 						)
 					);
 
-	//	$this->Match->recursive =-1;
-	//	$this->Match->contain( array( 'Pool', 'Registration' => array( 'Competitor' => 'Club')));
+		$this->Match->recursive =-1;
+		$this->Match->contain( array( 'Player' => array('Registration' => array( 'Competitor' => 'Club'))));
 
 		$match =  $this->Match->read(null, $id);
+		$competitors = array(1=>'White',2=>'Blue');
+		foreach( $match['Player'] as $p )
+		{
+			$c = $p['Registration']['Competitor'];
+			$competitors[$p['pos']] = $c['first_name']. " ".$c['last_name']." (".$c['Club']['club_abbr'].")";
+		}
 		$mat_id = $this->$match['Match']['mat_id'];
 
-		$this->set( compact('match', 'scoring','match_id','mat_id'));
+		$this->set( compact('match', 'scoring','match_id','mat_id','competitors'));
 		$this->set('referer',  $this->referer() );
 
 	}

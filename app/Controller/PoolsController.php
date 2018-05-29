@@ -195,7 +195,6 @@ function setup( $id = null ) {
 
 	function unasigned( $id = null ){
 
-
 		$ccond = array( );
 		$rcond = array( );
 
@@ -234,7 +233,41 @@ function setup( $id = null ) {
 		$this->set(compact( 'pool', 'registrations') );
 
 
-} // fn
+	} // fn
+
+	function assignReady( $id = null ){
+
+		$ccond = array( );
+		$rcond = array( );
+
+		$rcond['Registration.event_id'] = $this->event['id'];
+		$rcond['Registration.pool_id'] = 0;
+
+		$this->Pool->Registration->contain( array(
+
+					'Competitor'=>array(
+						'conditions' => $ccond ,
+						//'order'  => 'Registration.weight',
+						)
+		));
+		foreach( $this->Pool->Registration->find( 'all',
+				array(
+					'conditions' => array(
+							'event_id'	=> $this->event['id'],
+							'auto_pool'	=> 1,
+							'pool_id'	=> 0,
+							'rtype'		=> 'shiai'
+					),
+					'order'	=> 'weight'
+				)
+		) as $reg)
+		{
+			$this->Pool->Registration->save( $reg, false );
+		}
+		$this->redirect( $this->referer());
+
+	} // fn
+
     function poolShow(  $id ) {
 
 	if( $id != 0){
@@ -408,7 +441,6 @@ Q1;
 			$this->redirect(array('action'=>'index'));
 		}
 		if (!empty($this->data)) {
-
 			if ($this->Pool->save($this->data)) {
 				$this->Session->setFlash(__('The Pool has been saved', true));
 				if( $this->request->is('ajax') ){
@@ -431,7 +463,6 @@ Q1;
 					'fields' => array('Mat.id','Mat.name','Mat.location' )
 					,'conditions' => array('Mat.event_id'=> $this->event['id'] )
 				);
-
 
 		$mats = $this->Pool->Mat->find('list', $mlst);
 		$dpt = "";
@@ -869,6 +900,7 @@ function awards($id=null){
 		$ccond = array(  );
 		$rcond = array( 'Registration.bracket_pos <>' => 0 );
 		$pcond = array( 'Pool.status' => array(8,6) );
+		$icond = array( 'Player.win_lose' => 1, 'Player.by' => 'ippon' );
 
 		if( !empty($this->data)){ //filter
 			$id = $this->data['Event']['id'];
@@ -902,8 +934,6 @@ function awards($id=null){
 
 		$this->set('pools', $this->paginate('Pool'));
 
-		$event = $this->Pool->Event->read(null,$id );
-		$this->set('event',$event );
 
 		$event = $this->Pool->Event->read(null,$id );
 		$this->set('event',$event );
@@ -917,6 +947,14 @@ function awards($id=null){
 
 function awards_lst($id=null){
 	 $this->awards($id);
+	$isql = "SELECT * FROM (SELECT registration_id AS reg_id, COUNT(match_id) AS ippons FROM matches_registrations mr JOIN matches m ON mr.match_id = m.id JOIN pools p ON m.pool_id = p.id WHERE p.event_id=$id AND win_lose=1 AND mr.by = 'ippon' GROUP BY registration_id) sq1";		
+        $i_r = $this->Pool->query( $isql, false );
+	$ippons=array();
+	foreach( $i_r as $p ){
+
+		$ippons[$p['sq1']['reg_id'] ] = $p['sq1']['ippons'];
+	}
+        $this->set('ippons', $ippons);
 } //fn
 
 
@@ -986,7 +1024,7 @@ function setPlaces( $id = null ){
  	   // App::import('Helper', 'Html');
 
  		//$fdf = new NtkFdf();
-		//$this->Ntkfdf->init();
+		$this->Ntkfdf->init();
 
  		//$html = new HtmlHelper();
  		$view = new View($this);
@@ -994,11 +1032,22 @@ function setPlaces( $id = null ){
 		$this->Pool->contain('Registration');
  		$p = $this->Pool->read(null, $id);
 
- 		//$this->Ntkfdf->set_value( "Event", $this->event['event_name']);
- 		//$this->Ntkfdf->set_value( "Division", $p['Pool']['pool_name'] . " " . $p['Pool']['division']. " " . $p['Pool']['category']);
+		$this->Ntkfdf->set_value( "Event", $this->event['event_name']);
+ 		$this->Ntkfdf->set_value( "Division", $p['Pool']['pool_name'] . " " . $p['Pool']['division']. " " . $p['Pool']['category']);
 //Ilya
-	 	//$this->Ntkfdf->set_value( "Timestamp", date('m/d/y H:i:s'));
+	 	$this->Ntkfdf->set_value( "Timestamp", date('m/d/y H:i:s'));
 		$fields = array ('Event' => $this->event['event_name'], 'Division' => $p['Pool']['pool_name'] . " " . $p['Pool']['division']. " " . $p['Pool']['category']);
+
+ 		$this->Ntkfdf->set_value( "age", "Age:". $p['Pool']['min_age'] . " to " . $p['Pool']['max_age']);
+ 		$fields["age"] = $p['Pool']['min_age'] . " to " . $p['Pool']['max_age'];
+ 		$this->Ntkfdf->set_value( "weight", "W:" . $p['Pool']['min_weight'] . " to " . $p['Pool']['max_weight'] );
+ 		$fields["weight"] = $p['Pool']['min_weight'] . " to " . $p['Pool']['max_weight'] ;
+ 		$fields["shime_waza"] = "Shime Waza: " + $p['Pool']['shime']?"YES":"NO";
+ 		$this->Ntkfdf->set_value( "shime_waza", $p['Pool']['shime']?"":"NO CHOKES");
+ 		$fields["kansetsu_waza"] = "Kansetsu Waza: " . $p['Pool']['kansetsu']?"":"NO ARM BARS";
+ 		$this->Ntkfdf->set_value( "kansetsu_waza", $p['Pool']['kansetsu']?"":"NO ARM BARS");
+ 		$fields["match_time"] = "Time: " . $p['Pool']['match_duration'];
+ 		$this->Ntkfdf->set_value( "match_time", "TIME:".$p['Pool']['match_duration']);
  		
 		$pt = $p['Pool']['type'];
  		$pstat = $p['Pool']['status'];
@@ -1015,7 +1064,7 @@ function setPlaces( $id = null ){
 				. ".pdf";
  		//debug($pdfFile); exit(0);
  		//$fdf->ntk_fdf_set_file(  $pdfFile);
-		//$this->Ntkfdf->set_file($pdfFile);
+		$this->Ntkfdf->set_file($pdfFile);
 
  		$sql = "SELECT match_num, m.round, m.status, pos, c.id, c.first_name, c.last_name , u.club_abbr , r.win_lose, r.by, e.seed
  		FROM pools p
@@ -1043,11 +1092,11 @@ WHERE p.id =$id";
 				$val = $r['u']['club_abbr'] .": ";
 			}
 			$val .= $r['c']['first_name'] . " " . $r['c']['last_name'];
- 			//$this->Ntkfdf->set_value( "$field", "$val");
+ 			$this->Ntkfdf->set_value( "$field", "$val");
 			$fields[$field] = $val;
 			
 			if( $r['m']['round'] == 1 ){
- 				//$this->Ntkfdf->set_value( "S_". $r['m']['match_num']."_". $r['r']['pos'], $r['e']['seed'] );
+ 				$this->Ntkfdf->set_value( "S_". $r['m']['match_num']."_". $r['r']['pos'], $r['e']['seed'] );
 				$fields["S_". $r['m']['match_num']."_". $r['r']['pos']] = $r['e']['seed'];
 			}
  			//debug( "$field $val");
@@ -1059,20 +1108,22 @@ WHERE p.id =$id";
  			  	$wins[ $r['e']['seed'] ] ++ ;
  			  	$field =  $r['m']['match_num']   . "_wl_" . $r['r']['pos'];
  				$val =  $r['r']['by'];
- 				//$this->Ntkfdf->set_value( "$field", "$val");
+ 				$this->Ntkfdf->set_value( "$field", "$val");
 				$fields[$field] = $val;
  				$field =  $r['m']['match_num']   . "_scr_" . $r['r']['pos'];
  				$val2 = 1;
  				switch( $val ){
  					case 'ippon':
+ 					case 'fusen-gachi':
+ 					case 'hansoku-make':
  							$val2= 10; break;
  					case 'wazaari':
- 							$val2= 7; break;
- 					case 'yuko':
  							$val2= 5; break;
+ 					case 'yuko':
+ 							$val2= 1; break;
 
  				}
- 				//$this->Ntkfdf->set_value( "$field", "$val2");
+ 				$this->Ntkfdf->set_value( "$field", "$val2");
 				$fields[$field] = $val2;
  				$points[ $r['e']['seed'] ] += $val2;
 
@@ -1083,15 +1134,17 @@ WHERE p.id =$id";
 			}
 		}
 		if( $pt == 'rr' && (($pstat == 5) || ($pstat == 6) || ($pstat == 7) || ($pstat == 8) || ($pstat == 9) )){
-			//	$seed = $r['seed'];
-			//	$this->Ntkfdf->set_value( "tot_win_$seed",  $r['match_wins'] );
-			//	$this->Ntkfdf->set_value( "tot_los_$seed",  $r['match_loses'] );
+				/*
+				$seed = $r['seed'];
+				$this->Ntkfdf->set_value( "tot_win_$seed",  $r['match_wins'] );
+				$this->Ntkfdf->set_value( "tot_los_$seed",  $r['match_loses'] );
+				*/
 			foreach( $wins as $s => $v ){
-			 	//$this->Ntkfdf->set_value( "tot_win_$s",  $wins[$s]);
+			 	$this->Ntkfdf->set_value( "tot_win_$s",  $wins[$s]);
 				$fields["tot_win_$s"] = $wins[$s];
-				//$this->Ntkfdf->set_value( "tot_los_$s",  $loses[$s]);
+				$this->Ntkfdf->set_value( "tot_los_$s",  $loses[$s]);
 				$fields["tot_los_$s"] = $loses[$s];
-				//$this->Ntkfdf->set_value( "tot_pts_$s",  $points[$s]);
+				$this->Ntkfdf->set_value( "tot_pts_$s",  $points[$s]);
 				$fields["tot_pts_$s"] = $points[$s];
 
 			}
@@ -1118,7 +1171,7 @@ WHERE p.id =$id";
 		foreach( $pos['Registration'] as $r){
 			$c = $r['Competitor'];
 			$i++;
-			//$this->Ntkfdf->set_value( "winner_$i",  $c['first_name'] . " " . $c['last_name'] . " :" .  $c['Club']['club_name']);
+			$this->Ntkfdf->set_value( "winner_$i",  $c['first_name'] . " " . $c['last_name'] . " :" .  $c['Club']['club_name']);
 			$fields["winner_$i"] = $c['first_name'] . " " . $c['last_name'] . " :" . $c['Club']['club_name'];
 
 
@@ -1127,7 +1180,7 @@ WHERE p.id =$id";
 		}
 
  		//$fdfStr=$fdf->ntk_get_fdf();
-		//$fdfStr=$this->Ntkfdf->get_fdf();
+		$fdfStr=$this->Ntkfdf->get_fdf();
 		//$this->layout = "fdf";
 		//$this->set( 'fdfStr' , $fdfStr );
 		
@@ -1136,18 +1189,18 @@ WHERE p.id =$id";
 		$pdfStr='';
 		
 
-			//$fdf_fn = tempnam(".", "fdf");
+			$fdf_fn = tempnam(".", "fdf");
 			$data_fn = tempnam(".", "dat");
 
-			//$fp = fopen($fdf_fn, 'w');
+			$fp = fopen($fdf_fn, 'w');
 			$dat=serialize($fields);
 			$dp = fopen($data_fn, 'w');
 
 			if($dp) {
-			//fwrite($fp, $fdfStr);
+			fwrite($fp, $fdfStr);
 			fwrite($dp, $dat);
 
-			//fclose($fp);
+			fclose($fp);
 			fclose($dp);
 
 			// Send a force download header to the browser with a file MIME type
@@ -1156,16 +1209,16 @@ WHERE p.id =$id";
 
 			// Actually make the PDF by running pdftk - make sure the path to pdftk is correct
 			// The PDF will be output directly to the browser - apart from the original PDF file, no actual PDF wil be saved on the server.
-			// $create = "/usr/local/bin/pdftk $pdfPath fill_form $fdf_fn output - flatten";
-			//$create = "/usr/bin/pdftk $pdfPath fill_form $fdf_fn output - flatten";
-			$create = "perl " . WWW_ROOT . "/files/makepdf.pl " . $pdfPath . " " . $data_fn;
+			$create = "/usr/bin/pdftk $pdfPath fill_form $fdf_fn output - flatten";
+			// $create = "/src/bin/pdftk $pdfPath fill_form $fdf_fn output - flatten";
+			// $create = "perl " . WWW_ROOT . "/files/makepdf.pl " . $pdfPath . " " . $data_fn;
 			//debug($create);
 			error_log(  $create ) ;
 			passthru( $create );
 
 				
 			// delete temporary fdf file;
-			//unlink( $fdf_fn );
+			unlink( $fdf_fn );
 			unlink($data_fn); 
 			}
 			exit(0);

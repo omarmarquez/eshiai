@@ -23,7 +23,9 @@
 				$c = $p['Registration']['Competitor'];
 				// $c['Club']['club_abbr'] . ':&nbsp;'. 
 				$init = substr( $c['first_name'], 0 , 1 ).'.';
-				$cn[ $p['pos'] ] =   $c['first_name']. ' '.  $c['last_name']  ;
+				$cn[ $p['pos'] ] =   $c['first_name']. ' '.  $c['last_name']  
+				 		.  "<br>" . $p['Registration']['club_abbr']
+				 ;
 				endif;
 			}
             
