@@ -274,9 +274,8 @@ function afterSave( $created )
 	}
 
 
-//	if( $created){ 	 // lets find what registrations we can bring here
-	if( $created || ( isset($this->data['Pool']['status']) &&  $this->data['Pool']['status'] == 0 )){ 	 // lets find what registrations we can bring here
-
+//	if( $created || ( isset($this->data['Pool']['status']) &&  $this->data['Pool']['status'] == 0 )){ 	 // lets find what registrations we can bring here
+	if( $created || ( $this->field("auto") == 1  &&  $this->field('status') == 0 )){
 		$ranks = array();
 		//debug($this->data);
 		if( $this->data['Pool']['category'] ){
