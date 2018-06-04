@@ -1133,7 +1133,7 @@ WHERE p.id =$id";
 			}
 			}
 		}
-		if( $pt == 'rr' && (($pstat == 5) || ($pstat == 6) || ($pstat == 7) || ($pstat == 8) || ($pstat == 9) )){
+		if( $pt == 'rr' && (($pstat == 5) || ($pstat == 6) || ($pstat == 8) )){
 				/*
 				$seed = $r['seed'];
 				$this->Ntkfdf->set_value( "tot_win_$seed",  $r['match_wins'] );
@@ -1152,7 +1152,7 @@ WHERE p.id =$id";
 		}
 
 
-		if( ($pstat == 5) || ($pstat == 6) || ($pstat == 7) || ($pstat == 8) || ($pstat == 9)  ){
+		if( ($pstat == 5) || ($pstat == 6) || ($pstat == 8) ){
 			// completed or awarded
 
 		$rcond = array( 'Registration.bracket_pos <>' => 0 );
