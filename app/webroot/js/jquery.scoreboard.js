@@ -17,7 +17,6 @@
 		var pin_clock = $('#clock2');
 		
 		var controls = board.find('.controls');
-		
 		controls.append('<input type="button" class="start" value="Hajime" />');
 		controls.append('<input type="button" class="stop" value="Mate" />');
 		controls.append('<p/>');
@@ -36,6 +35,10 @@
 		controls.append('<input type="button" class="breset" value="Reset Board"  style="display:inline;"/>');
 		controls.append('<input type="button" class="award" value="Award Match"  style="display:inline;"/>');
 		controls.append('<p/>');
+                controls.append('<div class="rdiv">Rules:');
+                controls.append('<input type="radio" class="rdiv" id="ijf2018" name="rules" value="2018" checked><label for="ijf2018">ijf&nbsp;2018</label>');
+                controls.append('<input type="radio" class="rdiv" id="ijf2017" name="rules" value="2017"><label for="ijf2017">ijf&nbsp;2017</label>');
+                controls.append('</div><br/>');		
 		//controls.append('<br/> <span class="debug">_</span>');
 
 
@@ -50,19 +53,25 @@
 		var reset = board.find('.reset');
 		var rem = board.find('.remove');
 		var board_reset = board.find('.breset');
+		var rdiv = board.find('.rdiv');
+		var ruleset = 2018;
 
 		start.bind('click', function() {
+		    ruleset = $('input[name=rules]:checked').val();
 		    main_clock.trigger('start');
 		    start.hide();
 		    award.hide();
 		    stop.show();
+		    rdiv.hide();
 		});
 		stop.bind('click', function() {
+		    pin_clock.trigger('stop');
 		    main_clock.trigger('stop');
 		    stop.hide();
 		    start.show();
 		    award.show();
-		});
+		    rdiv.show();
+	});
 		
 		function reset_clock1(){
 		    main_clock.trigger('reset', [min1.val(),sec1.val(), '0','0']);
@@ -139,11 +148,13 @@
 			v = white_w.text()|0;
 			inc = rem.is(':checked')?-1:1;
 			v = v+ inc ;
-			if( v >1 ){ white_i.click(); v=2;}
 			if( v< 0 ) v = 0;
 			white_w.html( v );
-			if( osai_play == 'white' ){
-				pin_clock.trigger('adjust', [ '0', v?15:20] );
+			if( ruleset == 2018){
+			   if( v >1 ){ white_i.click(); v=2;}
+			   if( osai_play == 'white' ){
+				pin_clock.trigger('adjust', [ '0', v?10:20] );
+			   }
 			}
 			
 		});
@@ -151,11 +162,13 @@
 			v = blue_w.text()|0;
 			inc = rem.is(':checked')?-1:1;
 			v = v+ inc ;
-			if( v >1 ){  blue_i.click(); v=2;}
 			if( v< 0 ) v = 0;
 			blue_w.html( v );
-			if( osai_play == 'blue' ){
-				pin_clock.trigger('adjust', [ '0', v?15:20] );
+			if( ruleset == 2018){
+			   if( v >1 ){  blue_i.click(); v=2;}
+			   if( osai_play == 'blue' ){
+				pin_clock.trigger('adjust', [ '0', v?10:20] );
+			    }
 			}
 				
 		
@@ -229,7 +242,7 @@
 			}
 		});
 		award.bind('click', function() {
-			   if( ! confirm('Award Match') ) return false;
+			   /* if( ! confirm('Award Match') ) return false; */
 				if( $('#match_id').val() != 0 )
 					$('#award_dialog').dialog( 'open' ); 
 			   return false;
@@ -267,13 +280,19 @@
 			case 36:  // blue kp 7
 			case 103:  // blue kp 7
 					osai_play = "white";
-					osai_time = (white_w.text()|0)?15:20;		
+					osai_time = 20; // (white_w.text()|0)?15:20;		
+					if( ruleset == 2018){
+						osai_time = (white_w.text()|0)?10:20;		
+					}
 					osai.click();
 					prc = true;
 					break;
 			case 109:   // white -
 					osai_play = "blue";
-					osai_time = (blue_w.text()|0)?15:20;	
+					osai_time = 20; // (blue_w.text()|0)?15:20;	
+					if( ruleset == 2018){
+						osai_time = (blue_w.text()|0)?10:20;	
+					}
 					osai.click();
 					prc = true;
 					break;
