@@ -131,7 +131,7 @@ function beforeSave( $options = array() ) {
 		if( $this->data['Registration']['upSkill'] =='Y'
 			||  $this->data['Registration']['upAge'] =='Y'
 			||  $this->data['Registration']['upWeight'] =='Y' ){
-			//$this->data['Registration']['auto_pool'] = 0;
+			$this->data['Registration']['auto_pool'] = 0;
 		}
 		if( isset($this->data['Registration']['pool_id']) && $this->data['Registration']['pool_id'] != 0 ){
 
