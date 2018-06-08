@@ -1066,13 +1066,13 @@ function setPlaces( $id = null ){
  		//$fdf->ntk_fdf_set_file(  $pdfFile);
 		$this->Ntkfdf->set_file($pdfFile);
 
- 		$sql = "SELECT match_num, m.round, m.status, pos, c.id, c.first_name, c.last_name , u.club_abbr , r.win_lose, r.by, e.seed
+ 		$sql = "SELECT match_num, m.round, m.status, pos, IFNULL(c.id,0) as id, IFNULL(c.first_name,'') as first_name, IFNULL(c.last_name,'BYE') as last_name, IFNULL(u.club_abbr,'') as club_abbr , r.win_lose, r.by, e.seed
  		FROM pools p
 JOIN matches m ON pool_id = p.id
 JOIN matches_registrations r on r.match_id = m.id
-JOIN registrations e ON e.id = registration_id
-JOIN competitors c ON c.id = e.competitor_id
-JOIN clubs u ON u.id = c.club_id
+LEFT JOIN registrations e ON e.id = registration_id
+LEFT JOIN competitors c ON c.id = e.competitor_id
+LEFT JOIN clubs u ON u.id = c.club_id
 WHERE p.id =$id";
 
  		$res= $this->Pool->query($sql);
@@ -1084,14 +1084,14 @@ WHERE p.id =$id";
 
 		foreach( $res  as $r){
 
-			if( true||$r['c']['id'] || $r['m']['status'] ){
+			if( true||$r[0]['id'] || $r['m']['status'] ){
 
 			$field =  $r['m']['match_num']   . "_" . $r['r']['pos'];
 			$val = "";
-			if( $r['m']['round'] == 1 &&  $r['c']['id'] <> 0 ){
-				$val = $r['u']['club_abbr'] .": ";
+			if( $r['m']['round'] == 1 &&  $r[0]['id'] <> 0 ){
+				$val = $r[0]['club_abbr'] .": ";
 			}
-			$val .= $r['c']['first_name'] . " " . $r['c']['last_name'];
+			$val .= $r[0]['first_name'] . " " . $r[0]['last_name'];
  			$this->Ntkfdf->set_value( "$field", "$val");
 			$fields[$field] = $val;
 			
