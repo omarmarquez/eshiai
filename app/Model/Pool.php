@@ -174,6 +174,8 @@ S1;
 
 	}
 	}else{
+        $sql = "UPDATE registrations SET bracket_pos = 0 WHERE pool_id = $id;";
+        $res = $this->query( $sql );
 
 		$sql = "SELECT * FROM `bracketrules` Bracket
 		JOIN `pools` Pool on Bracket.bracket_id = Pool.bracketrule
