@@ -133,9 +133,11 @@ function set_bracket_pos($id = null ) {
 	//debug($this->data);
 	$registrations = $this->data['Registration'];
 	$regs = $sep = "";
+    $regsCnt=0;
 	foreach( $registrations as $r){
 		$regs .= $sep . $r['id'];
 		$sep = ",";
+        $regsCnt++;
 	}
 	$matches = $this->data['Match'];
 	$type = $this->data['Pool']['type'];
@@ -145,38 +147,83 @@ function set_bracket_pos($id = null ) {
 		$sum_points = "sum(
 		case `by` when 'yuko' then 5 when 'wazaari' then 7 when 'ippon' then 10 when 'fusen-gachi' then 10 else 0 end * case win_lose when 1 then 1 else -0 end )";
 		$sql = <<<S1
-SELECT  distinct 'id', sum(win_lose) as wins, $sum_points as points
+SELECT Count(registration_id) as 'id', wins, points
+FROM (SELECT  registration_id, sum(win_lose) as wins, $sum_points as points
 FROM matches_registrations r
  WHERE registration_id in ( $regs )
-Group by registration_id order by 2 desc ,3 desc
+Group by registration_id) mr
+Group by wins, points
+ order by wins desc , points desc
 S1;
 
-	$res = $this->query( $sql );
-//debug($sql); debug($res); exit(0);
-//	debug($res);
-	$pos=0;
-	foreach( $res as $posv ){
-		$pos++;
-		$wins = $posv[0]['wins'];
-		$points = $posv[0]['points'];
+        $res = $this->query( $sql );
+        //debug($sql); debug($res); exit(0);
+        //debug($res);
+        //if a 3-way tie in 3-man rr pool and all matches awarded - create another set of matches;
+        if( $regsCnt == 3 && $res[0][0]['id'] == 3 && $res[0]['mr']['wins'] == 1) {
+            //debug($sql); debug($res); exit(0);
+            $this->addRrRound($id);
+            return;
+        }
 
-		$sql = <<<S1
-		UPDATE registrations SET bracket_pos = $pos
-		WHERE pool_id = $id AND id IN (
-			SELECT  registration_id
-				FROM matches_registrations r
- 				WHERE registration_id in ( $regs )
-				Group by registration_id
-				HAVING sum(win_lose) =$wins AND $sum_points = $points
-		)
+        $pos=0;
+        foreach( $res as $posv ){
+            $pos++;
+            $idCnt = $posv[0]['id'];
+            $wins = $posv['mr']['wins'];
+            $points = $posv['mr']['points'];
+            
+            if( $idCnt == 2) {
+                //tie breaker - who won head-to-head
+                $sql = <<<S1
+SELECT registration_id as 'id', win_lose, match_id
+FROM matches_registrations mr
+WHERE match_id in (
+    SELECT match_id
+    FROM matches_registrations r
+     WHERE registration_id in ( 
+                SELECT  registration_id
+                    FROM matches_registrations r
+                    WHERE registration_id in ( $regs )
+                    Group by registration_id
+                    HAVING sum(win_lose) =$wins AND $sum_points = $points )
+    GROUP BY match_id
+    HAVING count(match_id) = 2
+    )
+ORDER BY win_lose DESC
 S1;
-		$res = $this->query($sql);
+         
+                $res1 = $this->query($sql);
+                //debug($sql); debug($res1); exit(0);
+                foreach( $res1 as $ptie ) {
+                    $pid = $ptie['mr']['id'];
+                    $sql=<<<S1
+UPDATE registrations SET bracket_pos = $pos
+    WHERE pool_id = $id AND id = $pid
+S1;
 
-	}
+                    $res = $this->query($sql);
+                    $pos++;
+                }
+                $pos--;
+            } else {
+                $sql = <<<S1
+UPDATE registrations SET bracket_pos = $pos
+WHERE pool_id = $id AND id IN (
+    SELECT  registration_id
+        FROM matches_registrations r
+        WHERE registration_id in ( $regs )
+        Group by registration_id
+        HAVING sum(win_lose) =$wins AND $sum_points = $points
+)
+S1;
+                $res = $this->query($sql);        
+            }
+        }
 	}else{
         $sql = "UPDATE registrations SET bracket_pos = 0 WHERE pool_id = $id;";
         $res = $this->query( $sql );
-
+        
 		$sql = "SELECT * FROM `bracketrules` Bracket
 		JOIN `pools` Pool on Bracket.bracket_id = Pool.bracketrule
 		JOIN `matches` Matchh on Matchh.pool_id = Pool.id and Matchh.match_num = Bracket.match_num
@@ -197,9 +244,7 @@ S1;
 				. " WHERE id=". $r['Registration']['registration_id']);
 			}
 		}
-
 	}
-
 }
 
 
@@ -483,4 +528,55 @@ function schedule( $id, $limit = 5){
  //   	debug( $this->data ); exit(0);
 		return;
   	} // schedule
+    
+    function addRrRound($id = null){
+        if (!$id) {
+            return;
+        }    
+        
+        $sql =  "SELECT * FROM matches m WHERE pool_id = $id ORDER BY match_num ";
+        $m = $this->query( $sql );
+
+        if(count($m)!=3) {
+            //debug($m); exit(0);
+            return;
+        }
+        
+        //debug($m); exit(0);
+        foreach($m as $match) {
+            $r1 = 0;
+            $r2 = 0;
+            $oldid = $match['m']['id'];
+            
+            $sql =  "SELECT registration_id FROM matches_registrations r WHERE match_id = $oldid ORDER BY pos";
+            $regs = $this->query( $sql );
+            //debug($regs); exit(0);
+            $r1 = $regs[0]['r']['registration_id'];
+            $r2 = $regs[1]['r']['registration_id'];
+            
+            $mn = $match['m']['match_num']+3;
+            $round = $match['m']['round']+3;
+            
+            $m = new Match;
+
+            $m->data["Match"]["match_num"] = $mn;
+
+            $m->data["Match"]["pool_id"] = $this->data["Pool"]['id'];
+            $m->data["Match"]["mat_id"] = $this->data["Pool"]['mat_id' ];
+            $m->data["Match"]["round"] = $round;
+
+            $m->save();
+            $mid = $m->id;
+
+            $this->Match->Player->create();
+            $p = array( 'match_id' => $mid , 'pos' => 1 , 'registration_id' => $r1, 'win_lose' => 0 );
+            $this->Match->Player->save( array( 'Player' => $p));
+            $this->Match->Player->create();
+            $p = array( 'match_id' => $mid , 'pos' => 2 , 'registration_id' => $r2, 'win_lose' => 0 );        
+            $this->Match->Player->save( array( 'Player' => $p ));
+        
+        }
+        $this->saveField( 'status' ,  4 , false ); //reset to running since added matches
+        $this->schedule($id); //queue up new matches
+    } //addRrRound
 } //class
