@@ -1084,8 +1084,10 @@ function checkIn2( $event_id = null ){
 				unset($r['Registration']['id'] );
 				$r['Registration']['event_id'] = $event_info['id'];
 				$r['Registration']['pool_id'] = 0;
+				$r['Registration']['auto_pool'] = 1;
 				$r['Registration']['match_wins'] = 0;
 				$r['Registration']['match_loses'] = 0;
+				$r['Registration']['bracket_pos'] = 0;
 							if(!$r['Registration']['card_type'] ){
 					$r['Registration']['card_type']='OTHER';
 				}
@@ -1555,10 +1557,10 @@ function checkIn2( $event_id = null ){
 						}
 
 						//get 2nd division preference
-						if( $r_type =='shiai') {
 							$up_w = 0;
 							$up_s = 0;
 							$up_a = 0;
+						if( $r_type =='shiai') {
 							$shiai_count++;
 							if ( $shiai_count == 1)
 								$firstDiv = $div_name;
@@ -1602,7 +1604,7 @@ function checkIn2( $event_id = null ){
 						'upSkill'		=> $up_s == 1 ? 'Y' : 'N',
 						'upAge'			=> $up_a == 1 ? 'Y' : 'N',
 						'upWeight'		=> $up_w == 1 ? 'Y' : 'N',
- 						#'auto_pool'		=> $up_a == 1 || $up_w ==1 || $up_s == 1 ? 0 : 1,
+ 						'auto_pool'		=> $up_a == 1 || $up_w ==1 || $up_s == 1 ? 0 : 1,
 						'event_id' 		=> $event_info['id'],
 						'participant_id'=> $partID,
     						'competitor_id' => $comp['Competitor']['id'],
@@ -1619,7 +1621,8 @@ function checkIn2( $event_id = null ){
     						'paid'  		=> $row["Payment Status"],
  						'card_type'		=> $c_type,
     						'card_number'	=> $row["$i Judo Card Number"],
-    						'kata_name'     => $r_type === 'kata'?explode(' - ',$row[$div])[0]:'',
+    						//'kata_name'     => $r_type === 'kata'?preg_replace(array('/\s*(Senior|senior|Junior|junior)\s*/','),'', explode('',$row[$div])[0]):'',
+    						'kata_name'     => $r_type === 'kata'?explode(' ', preg_replace('/\s*(Senior|senior|Junior|junior)\s*/','', $row[$div]))[0]:'',
     						'kata_partner'  => $k_p
 
     					);
@@ -1639,8 +1642,12 @@ function checkIn2( $event_id = null ){
     			fclose($handle);
 			}
 			$this->Session->setFlash(__('Import completed succesfully!.'));
-			//$this->redirect(array('action' => 'index'));
-			$this->redirect($this->referer());
+			$ref = $this->referer();
+			if( $ref ){
+				$this->redirect($ref);
+			} else {
+				$this->redirect(array('action' => 'index'));
+			}
 		} else {
 
 			$this->set( 'event_id', $id );
