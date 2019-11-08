@@ -549,6 +549,25 @@ function seed_all( $id = null, $rs = array() ){
 
 }
 
+// validate no duplicate seeds
+function check_seed( $id = null ){
+
+	$this->Pool->id = $id;
+
+	$sql = "SELECT r.seed, count(1) as cnt FROM registrations r "
+			. " WHERE r.pool_id = $id "
+			. " GROUP BY r.seed "
+			. " HAVING count(1) > 1 "
+			;
+	$err = $this->Pool->query( $sql );
+	if (count($err) <> 0) {
+		
+		$this->Session->setFlash(__('Duplicate seed detected. Please fix and resubmit.', true));
+		$this->redirect(array( 'action'=>'view',$id ));
+	}
+
+}
+
 function seed( $id = null ){
 
 	$seeds = $this->data['Pool'];
@@ -583,6 +602,9 @@ function createMatches($id = null) {
 		//Make sure we are seeded
 		$this->seed_all( $id );
 
+		//Validate no errors with seeding
+		$this->check_seed( $id );
+		
 		$this->Pool->recursive = 0;
 		$this->Pool->id = $id;
 		$pt = $this->Pool->field('type');
