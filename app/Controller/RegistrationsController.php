@@ -1468,16 +1468,64 @@ function checkIn2( $event_id = null ){
     					continue;
     				}
 
+    				//get club id from Dojo/Club field
+    				$clubname = trim($row["Dojo/Club"]);
+    				if ($clubname == "OTHER") {
+    					//actual name in field "Provide dojo/club name" 
+    					$clubname = trim($row["Provide dojo/club name"]);
+    				}
+    				$club = $this->Registration->Competitor->Club->find( 'first'
+										,array( 'conditions' =>  array( 'LOWER(club_name) LIKE' =>  '%'.strtolower($clubname).'%'  )
+								));
+					//debug( $club ); 
+    				if (! $club) {
+    					// add club
+    					$club_info = array( 'Club' => array(
+			 				'id' => false
+    						,'active' => 1
+			 				,'club_name' => $clubname
+			 				,'club_abbr' => strtoupper(trim(substr( $clubname, 0, 4)))
+			 				,'club_state' => ''
+			 				,'club_city' => ''
+			 				,'contact' => ''));
+    					$this->Registration->Competitor->Club->create($club_info);
+    					$this->Registration->Competitor->Club->save($club_info);
+			 			$club = $this->Registration->Competitor->Club->find( 'first'
+										,array( 'conditions' =>  array( 'LOWER(club_name) LIKE' =>  '%'.strtolower($clubname).'%'  )
+								));
+    				}
+    				//debug($club);
+					if( $club )
+						$clubid = $club['Club']['id'];
+    				else
+    					$clubid = $ucid;
+
     			for( $i = 1 ; $i <= $num_comps ; $i++ ){
 
     				$dob = date( "Y-m-d", strtotime(  $row[ "$i Date of Birth"] )); // date( "Y-m-d", strtotime(  $data[ 20 ] ));
     				$gender =  $row["$i Gender"]=='Male'?'M':'F'; // $data[ 21 ]=='Male'?'M':$data[ 21 ]=='M'?'M':'F';
     				$lname = trim( str_replace( '\\','', $row["$i Competitor Name (Last)"])); // trim( str_replace( '\\','', $data[ 3 ])  );
     				$fname = trim( str_replace( '\\','', $row["$i Competitor Name (First)"])); // trim( str_replace( '\\','', $data[ 4 ] ) );
-
+    				$rank = trim( str_replace( '\\','', $row["$i Belt Color"]));
+    				$card_number = $row["$i Judo Card Number"];
+					$email = trim( str_replace( '\\','', $row["Email"]));
+					$phone = $row["Mobile Phone"];
+	    			$c_type = 'OTHER';
+					switch( $row["$i Judo Affiliation"] ){
+						case "USA Judo":
+							$c_type = "USA Judo";
+							break;
+						case "United States Judo Federation":
+							$c_type = "USJF";
+							break;
+						case "United States Judo Association":
+							$c_type = "USJA";
+							break;							
+					}
+					
     				$csearch = array(
-						'LOWER(first_name)' => strtolower($fname)
-						,'LOWER(last_name)' => strtolower($lname)
+						//'LOWER(first_name)' => strtolower($fname),
+						'LOWER(last_name)' => strtolower($lname)
 						,'comp_sex' => $gender
 						,'comp_dob' => $dob
 					);
@@ -1486,22 +1534,44 @@ function checkIn2( $event_id = null ){
 						,'last_name' => $lname
 						,'comp_sex' => $gender
 						,'comp_dob' => $dob
+						,'comp_phone' => $phone
+						,'email' => $email
+						,'rank' => $rank
+						,'card_type' => $c_type
+						,'card_number' => $card_number
+						,'club_id' => $clubid
 					);
-
-
-    				$this->Registration->Competitor->contain('Club');
-					$comp = $this->Registration->Competitor->find( 'first'
+					
+					$comps = $this->Registration->Competitor->find( 'list'
 						,array( 'conditions' =>  $csearch )
 					);
 
+					//if we have more than one competitor with same last name/dob, match on fname
+					if (count($comps) >= 2) {	    				
+						$csearch = array(
+							'LOWER(first_name)' => strtolower($fname)
+							,'LOWER(last_name)' => strtolower($lname)
+							,'comp_sex' => $gender
+							,'comp_dob' => $dob
+						);
+						$this->Registration->Competitor->contain('Club');
+						$comp = $this->Registration->Competitor->find( 'first'
+							,array( 'conditions' =>  $csearch )
+						);
+					} elseif (count($comps) == 1) {
+						$this->Registration->Competitor->contain('Club');
+						$comp = $this->Registration->Competitor->findById($comps);
+					} else {
+						$comp = null;
+					}
+					
 					if( !$comp){
-
-						$cdata['club_id'] = $ucid;  // UNKNOWN
-						$club = $this->Registration->Competitor->Club->find( 'first'
-								,array( 'conditions' =>  array( 'LOWER(club_name) LIKE' => '%'.strtolower( trim(  $row["Dojo / Club"])) .'%')
-						));
-						if( $club )
-							$cdata['club_id'] = $club['Club']['id'];
+						//$cdata['club_id'] = $ucid;  // UNKNOWN
+						//$club = $this->Registration->Competitor->Club->find( 'first'
+						//		,array( 'conditions' =>  array( 'LOWER(club_name) LIKE' => '%'.strtolower( trim(  $row["Dojo / Club"])) .'%')
+						//));
+						//if( $club )
+						//	$cdata['club_id'] = $club['Club']['id'];
 
 						$this->Registration->Competitor->create();
 						$this->Registration->Competitor->save( array( 'Competitor' => $cdata ), false);
@@ -1509,14 +1579,24 @@ function checkIn2( $event_id = null ){
 						$comp = $this->Registration->Competitor->find( 'first'
 							,array( 'conditions' =>  $csearch )
 						);
-
 					}
-                    /*
-					 else{
-
-						debug( $comp );
+					else {
+						//update competitor data based on latest reg info
+	    				$cdata = array(
+							'id' => $comp['Competitor']['id']
+							,'comp_phone' => $phone
+							,'email' => $email
+							,'rank' => $rank
+							,'card_type' => $c_type
+							,'card_number' => $card_number
+							,'club_id' => $clubid
+						);						
+						$this->Registration->Competitor->save( array( 'Competitor' => $cdata ), false);
+						$this->Registration->Competitor->contain('Club');
+						$comp = $this->Registration->Competitor->findById($comp['Competitor']['id']);				
 					}
-                    */
+					
+					//debug( $comp ); continue;
 					$kata_count = 0;
 					$shiai_count = 0;
 					$prevDiv = '';
@@ -1524,6 +1604,7 @@ function checkIn2( $event_id = null ){
 						"Please select Competitor $i's division:" => 'shiai',
 						"$i Please select the second division:" => 'shiai',
 						"$i Please select the third division:" => 'shiai',
+						"$i Kata Only - Form" => 'kata',
 						"$i Kata Form" => 'kata',
 						"$i Second Kata Form" => 'kata',
 						"$i Third Kata Form" => 'kata'
@@ -1534,17 +1615,6 @@ function checkIn2( $event_id = null ){
 						$div_name = strtolower( explode(' ', $row[$div])[0] );
 						if($div_name!='open'){
 							$div_name .= 's';
-						}
-						$c_type = 'OTHER';
-						switch( $row["$i Judo Affiliation"] ){
-
-							case "USA Judo":
-								$c_type = "USA Judo";
-								break;
-
-							case "United States Judo Federation":
-								$c_type = "USJF";
-								break;
 						}
 
 						$k_p='';
@@ -1557,9 +1627,9 @@ function checkIn2( $event_id = null ){
 						}
 
 						//get 2nd division preference
-							$up_w = 0;
-							$up_s = 0;
-							$up_a = 0;
+						$up_w = 0;
+						$up_s = 0;
+						$up_a = 0;						
 						if( $r_type =='shiai') {
 							$shiai_count++;
 							if ( $shiai_count == 1)
@@ -1619,11 +1689,10 @@ function checkIn2( $event_id = null ){
     						'rank'			=> $row["$i Belt Color"],
     						'payment'		=> $row["Payment Amount"],
     						'paid'  		=> $row["Payment Status"],
- 						'card_type'		=> $c_type,
+ 							'card_type'		=> $c_type,
     						'card_number'	=> $row["$i Judo Card Number"],
-    						//'kata_name'     => $r_type === 'kata'?preg_replace(array('/\s*(Senior|senior|Junior|junior)\s*/','),'', explode('',$row[$div])[0]):'',
-    						'kata_name'     => $r_type === 'kata'?explode(' ', preg_replace('/\s*(Senior|senior|Junior|junior)\s*/','', $row[$div]))[0]:'',
-    						'kata_partner'  => $k_p
+    						'kata_name'     => $r_type === 'kata'?explode('-', preg_replace('/\s*(Senior|senior|Junior|junior)\s*/','', $row[$div]))[0]:'',
+                            'kata_partner'  => $k_p
 
     					);
 						//debug($reg_data); continue;
@@ -1643,7 +1712,7 @@ function checkIn2( $event_id = null ){
 			}
 			$this->Session->setFlash(__('Import completed succesfully!.'));
 			$ref = $this->referer();
-			if( $ref ){
+			if( $ref ) {
 				$this->redirect($ref);
 			} else {
 				$this->redirect(array('action' => 'index'));
