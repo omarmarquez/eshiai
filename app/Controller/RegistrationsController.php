@@ -697,7 +697,14 @@ function checkIn2( $event_id = null ){
 	if (!empty($this->request->data)) {
 
 		$id = $this->request->data['Registration']['event_id'];
+		$club = $this->request->data['Competitor']['club_id'];
+		$comp = $this->request->data['Registration']['competitor_id'];
+		if (! $club) {
 		$club = $this->Session->read('Reg.Club.id');
+		}
+		if (! $comp) {
+			$comp = $this->Session->read('Reg.Comp.id');
+		}
 		 if( $club == 0 ){
 				$this->request->data['Club']['club_abbr'] ='___';
 				$this->Registration->Competitor->Club->create();
@@ -708,10 +715,11 @@ function checkIn2( $event_id = null ){
 					$this->Session->setFlash(__('The Registration/Club could not be saved. Please, try again.', true));
 
 				}
+				$this->request->data['Competitor']['club_id'] = $club; //$this->Registration->Competitor->Club->id;
 			 }
-		$this->request->data['Competitor']['club_id'] = $club; //$this->Registration->Competitor->Club->id;
+		
 
-		$comp = $this->Session->read('Reg.Comp.id');
+		
 
 		 if(  $comp == 0 ){
 		 		$cn = split( ' ', $this->request->data['Competitor']['name']);
@@ -725,10 +733,11 @@ function checkIn2( $event_id = null ){
 					$this->Session->setFlash(__('The Registration/Competitor could not be saved. Please, try again.', true));
 
 				}
+				$this->request->data['Registration']['competitor_id'] = $comp; //$this->Registration->Competitor->id;
 			 }
 			// debug($this->request->data);
 
-			$this->request->data['Registration']['competitor_id'] = $comp; //$this->Registration->Competitor->id;
+			
 			$this->request->data['Registration']['club_abbr'] = $this->request->data['Club']['club_abbr'];
 			$this->Registration->create();
 			if ($this->Registration->save($this->request->data)) {
@@ -749,7 +758,14 @@ function checkIn2( $event_id = null ){
 			//$this->set('club_abbr', $comp['Club']['club_abbr'] );
 			//$this->set('comp_name', $comp['Competitor']['first_name'] . ' ' .  $comp['Competitor']['last_name']);
 			$this->request->data['Competitor']['name'] =
-			$comp['Competitor']['first_name']. ' ' .$comp['Competitor']['last_name'];
+				$comp['Competitor']['first_name']. ' ' .$comp['Competitor']['last_name'];
+			$this->request->data['Competitor']['comp_dob'] = $comp['Competitor']['comp_dob'];
+			$this->request->data['Competitor']['comp_sex'] = $comp['Competitor']['comp_sex'];
+			$this->request->data['Competitor']['club_id'] = $comp['Competitor']['club_id'];
+			$this->request->data['Registration']['rank'] = strtolower($comp['Competitor']['rank']);
+			$this->request->data['Registration']['card_type'] = $comp['Competitor']['card_type'];
+			$this->request->data['Registration']['card_number'] = $comp['Competitor']['card_number'];
+			$this->request->data['Registration']['competitor_id'] = $comp['Competitor']['id'];
 			$this->request->data['Club'] =$comp['Club'] ;
 				
 		}
